@@ -11,9 +11,13 @@
  */
 package cn.kgc.kjde1035.group1.service;
 
-import cn.kgc.kjde1035.group1.dao.UserDao;
+import java.util.List;
+
+import cn.kgc.kjde1035.group1.dao.IUserDao;
 import cn.kgc.kjde1035.group1.dao.UserDaoImpl;
-import cn.kgc.kjde1035.group1.entity.User;
+import cn.kgc.kjde1035.group1.entity.Paper;
+import cn.kgc.kjde1035.group1.entity.Sysuser;
+
 import cn.kgc.kjde1035.group1.utils.MD5Utils;
 
 /**
@@ -21,13 +25,13 @@ import cn.kgc.kjde1035.group1.utils.MD5Utils;
  *
  */
 public class UserServiceImpl implements UserService {
-	UserDao userDao = new UserDaoImpl();
+	IUserDao userDao = new UserDaoImpl();
 
 	/**
 	 * ×¢²á
 	 */
 	@Override
-	public Boolean regist(User user) {
+	public Boolean regist(Sysuser user) {
 		//¼ÓÃÜ
 		String newPwd = MD5Utils.stringToMD5(user.getUserPwd());
 		Integer result = userDao.userRegist(user);
@@ -38,6 +42,24 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
+	/**
+	 * µÇÂ¼
+	 */
+	@Override
+	public Boolean login(Sysuser user) {
+		Sysuser result = userDao.login(user);
+		if(result!=null) {
+			String newPwd = MD5Utils.stringToMD5(user.getUserPwd());
+			if(result.getUserPwd().equals(newPwd)) {
+				return true;
+			}else {
+				return false;
+			}
+		}else {
+			return false;
+		}
+	}
+	
 	
 
 }
