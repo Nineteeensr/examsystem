@@ -2,65 +2,106 @@ package cn.kgc.kjde1035.group1.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * 
  * @author 10217
  *
  * @param <E>
  */
-public class PageLimitUtil <E>{
-	//µ±Ç°Ò³Âë
-	private Integer currentPageNo = 0;//´ÓÇ°¶ËÒ³Ãæ»ñÈ¡
-	//Ò³Ãæ´óÐ¡
-	private Integer pageSize = 5;//¹Ì¶¨
-	//×Ü¼ÇÂ¼Êý
-	private Integer totalCount = 0;//´ÓÊý¾Ý¿âÖÐ»ñÈ¡
-	//×ÜÒ³Êý
+public class PageLimitUtil<E> {
+	// ï¿½ï¿½Ç°Ò³ï¿½ï¿½
+	private Integer currentPageNo = 0;// ï¿½ï¿½Ç°ï¿½ï¿½Ò³ï¿½ï¿½ï¿½È¡
+	// Ò³ï¿½ï¿½ï¿½Ð¡
+	private Integer pageSize = 5;// ï¿½Ì¶ï¿½
+	// ï¿½Ü¼ï¿½Â¼ï¿½ï¿½
+	private Integer totalCount = 0;// ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½Ð»ï¿½È¡
+	// ï¿½ï¿½Ò³ï¿½ï¿½
 	private Integer totalPageCount = 0;
-	//ÈÝÆ÷
-	private List<E> list = new ArrayList<E>();//´ÓÊý¾Ý¿âÖÐ²éÑ¯³öÊý¾Ýºó´æÈëList¼¯ºÏÖÐ 
+	// ï¿½ï¿½ï¿½ï¿½
+	private Integer minPageNo;
+
+	private Integer maxPageNo;
+
+	private List<E> list = new ArrayList<E>();// ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½Ð²ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½Ýºï¿½ï¿½ï¿½ï¿½Listï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
 	public Integer getCurrentPageNo() {
 		return currentPageNo;
 	}
+
 	public void setCurrentPageNo(Integer currentPageNo) {
 		this.currentPageNo = currentPageNo;
 	}
+
 	public Integer getPageSize() {
 		return pageSize;
 	}
+
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
 	}
+
 	public Integer getTotalCount() {
 		return totalCount;
 	}
+
 	/**
-	 * 	
-	 * @Title: setTotalCount   
-	 * @Description: TODO(¸ø×ÜÒ³Êý¸³Öµ)   
-	 * @param: @param totalCount      
-	 * @return: void      
-	 * @throws   
+	 * 
+	 * @Title: setTotalCount
+	 * @Description: TODO(ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½Öµ)
+	 * @param: @param totalCount
+	 * @return: void
+	 * @throws
 	 *
 	 */
 	public void setTotalCount(Integer totalCount) {
-		if(totalCount>0) {
+		if (totalCount > 0) {
 			this.totalCount = totalCount;
-			this.totalPageCount = (this.totalCount%this.pageSize==0)?(this.totalCount/this.pageSize):(this.totalCount/this.pageSize+1);
+			this.totalPageCount = (this.totalCount % this.pageSize == 0) ? (this.totalCount / this.pageSize)
+					: (this.totalCount / this.pageSize + 1);
 		}
 	}
+
 	public Integer getTotalPageCount() {
 		return totalPageCount;
 	}
-	
+
 	public void setTotalPageCount(Integer totalPageCount) {
-		this.totalPageCount=totalPageCount;
+		this.totalPageCount = totalPageCount;
 	}
+
 	public List<E> getList() {
 		return list;
 	}
+
 	public void setList(List<E> list) {
 		this.list = list;
 	}
+
+	public void setMinAndMax() {
+		if (this.currentPageNo <= 2) {
+			this.minPageNo = 1;
+		}else {
+			this.minPageNo=this.currentPageNo-2;
+		}
+
+		
+		if (this.currentPageNo >= totalPageCount - 2) {
+			this.maxPageNo = totalPageCount;
+		}else {
+			this.minPageNo=this.currentPageNo+2;
+		}
+	}
+
+	public Integer getMinPageNo() {
+		return minPageNo;
+	}
+
+	public Integer getMaxPageNo() {
+		return maxPageNo;
+	}
 	
+
+	
+
 }
