@@ -1,6 +1,8 @@
 package cn.kgc.kjde1035.group1.entity;
+
 /**
  * 用户实体
+ * 
  * @author Administrator
  *
  */
@@ -12,11 +14,11 @@ public class Sysuser {
 	private Integer userId;
 	private Integer roleId;
 	private String userName;
-	private String userTrueName;
+	private String usertruename;
 	private String userPwd;
 	private Integer userState;
-	
-	private String roleName;
+
+	private String rolename;
 
 	public Integer getUserId() {
 		return userId;
@@ -42,12 +44,12 @@ public class Sysuser {
 		this.userName = userName;
 	}
 
-	public String getUserTrueName() {
-		return userTrueName;
+	public String getUsertruename() {
+		return usertruename;
 	}
 
-	public void setUserTrueName(String userTrueName) {
-		this.userTrueName = userTrueName;
+	public void setUsertruename(String usertruename) {
+		this.usertruename = usertruename;
 	}
 
 	public String getUserPwd() {
@@ -66,12 +68,12 @@ public class Sysuser {
 		this.userState = userState;
 	}
 
-	public String getRoleName() {
-		return roleName;
+	public String getRolename() {
+		return rolename;
 	}
 
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
+	public void setRolename(String rolename) {
+		this.rolename = rolename;
 	}
 
 	public Sysuser() {
@@ -79,16 +81,16 @@ public class Sysuser {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Sysuser(Integer userId, Integer roleId, String userName, String userTrueName, String userPwd,
-			Integer userState, String roleName) {
+	public Sysuser(Integer userId, Integer roleId, String userName, String usertruename, String userPwd,
+			Integer userState, String rolename) {
 		super();
 		this.userId = userId;
 		this.roleId = roleId;
 		this.userName = userName;
-		this.userTrueName = userTrueName;
+		this.usertruename = usertruename;
 		this.userPwd = userPwd;
 		this.userState = userState;
-		this.roleName = roleName;
+		this.rolename = rolename;
 	}
 
 	public Sysuser(String userName, String userPwd) {
@@ -96,10 +98,5 @@ public class Sysuser {
 		this.userName = userName;
 		this.userPwd = userPwd;
 	}
-	
-	
 
-	
-	
-	
 }

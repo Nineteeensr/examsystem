@@ -89,7 +89,7 @@ public class PageLimitUtil<E> {
 		if (this.currentPageNo >= totalPageCount - 2) {
 			this.maxPageNo = totalPageCount;
 		}else {
-			this.minPageNo=this.currentPageNo+2;
+			this.maxPageNo=this.currentPageNo+2;
 		}
 	}
 

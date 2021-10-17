@@ -14,7 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zhenzi.sms.ZhenziSmsClient;
 
-import cn.kgc.kjde1035.group1.entity.User;
+import cn.kgc.kjde1035.group1.entity.Sysuser;
+
 import cn.kgc.kjde1035.group1.service.UserService;
 import cn.kgc.kjde1035.group1.service.UserServiceImpl;
 
@@ -57,15 +58,10 @@ public class RegistServlet extends HttpServlet {
 		String name = request.getParameter("userName");
 		String password = request.getParameter("userPwd");
 		// 把数据封装成user对象
-		User user = new User(name, password);
+		Sysuser user = new Sysuser(name, password);
 		// 3.调用service层方法
 		Boolean res = userService.regist(user);
-		// 4.判断result
-		if (res) {
-			response.sendRedirect("login.jsp");
-		} else {
-			out.print("<script type='text/javascript'>alert('注册失败');history.back();</script>");
-		}
+		
 	}
 
 }

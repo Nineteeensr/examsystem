@@ -13,7 +13,7 @@ package cn.kgc.kjde1035.group1.service;
 
 import java.util.List;
 
-import cn.kgc.kjde1035.group1.dao.IPaperDao;
+import cn.kgc.kjde1035.group1.dao.PaperDao;
 import cn.kgc.kjde1035.group1.dao.PaperDaoImpl;
 import cn.kgc.kjde1035.group1.entity.Paper;
 import cn.kgc.kjde1035.group1.entity.Subject;
@@ -23,13 +23,17 @@ import cn.kgc.kjde1035.group1.entity.Subject;
  *
  */
 public class PaperServiceImpl implements PaperService {
-	IPaperDao paperDao = new PaperDaoImpl();
+	PaperDao paperDao = new PaperDaoImpl();
 	/**
-	 * 学生点击试卷获取试卷内的错题
+	 * 学生点击试卷获取试卷内的题目
 	 */
 	@Override
 	public List<Subject> subjectList(Paper paper) {
 		return paperDao.subjectList(paper);
+	}
+	@Override
+	public List<Paper> list(Paper paper) {
+		return paperDao.list(paper);
 	}
 
 }

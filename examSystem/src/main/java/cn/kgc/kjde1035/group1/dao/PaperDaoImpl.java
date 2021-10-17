@@ -25,7 +25,7 @@ import cn.kgc.kjde1035.group1.entity.Subject;
  * @author 10217
  *
  */
-public class PaperDaoImpl extends BaseDao implements IPaperDao{
+public class PaperDaoImpl extends BaseDao implements PaperDao{
 	Connection conn = null;
 	PreparedStatement p = null;
 	ResultSet rs = null;
@@ -59,6 +59,31 @@ public class PaperDaoImpl extends BaseDao implements IPaperDao{
 			this.closeAll(rs, conn, p);
 		}
 		return subjectList;
+	}
+	/**
+	 * 学生登录进入index显示全部试题
+	 */
+	@Override
+	public List<Paper> list(Paper paper) {
+		List<Paper> list = new ArrayList<Paper>();
+		conn = this.getConnection();
+		String sql = "SELECT pname,count(*) scount FROM paper GROUP BY pname";
+		try {
+			p = conn.prepareStatement(sql);
+			rs = p.executeQuery();
+			while(rs.next()) {
+				paper = new Paper();
+				paper.setPname(rs.getString("pname"));
+				paper.setScount(rs.getInt("scount"));
+				list.add(paper);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			this.closeAll(rs, conn, p);
+		}
+		return list;
 	}
 	
 }
