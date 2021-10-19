@@ -11,6 +11,8 @@
  */
 package cn.kgc.kjde1035.group1.service;
 
+import java.util.List;
+
 import cn.kgc.kjde1035.group1.dao.StudentPaperDao;
 import cn.kgc.kjde1035.group1.dao.StudentPaperDaoImpl;
 import cn.kgc.kjde1035.group1.entity.Studentpaper;
@@ -27,6 +29,16 @@ public class StudentPaperServiceImpl implements StudentPaperService {
 	@Override
 	public Integer addPaper(Studentpaper studentpaper) {
 		return stupaperDao.addPaper(studentpaper);
+	}
+	@Override
+	public List<Studentpaper> list(String spId, Integer userId, Integer pageNo, Integer pageSize) {
+		
+		return stupaperDao.list(spId, userId, pageNo, pageSize);
+	}
+	@Override
+	public Integer getTotalCount(String spId, Integer userId) {
+		// TODO Auto-generated method stub
+		return stupaperDao.getTotalCount(spId, userId);
 	}
 
 }

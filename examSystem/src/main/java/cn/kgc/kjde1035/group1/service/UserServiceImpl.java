@@ -93,17 +93,17 @@ public class UserServiceImpl implements UserService {
 	 * 总用户数
 	 */
 	@Override
-	public Integer getTotalCount() {
+	public Integer getTotalCount(String usname,Integer roleId,String userTrueName) {
 		// TODO Auto-generated method stub
-		return userDao.getTotalCount();
+		return userDao.getTotalCount(usname,roleId,userTrueName);
 	}
 
 	/**
 	 * 获取用户列表
 	 */
 	@Override
-	public List<Sysuser> getAllUserLimit(Integer currentPageNo, Integer pageSize) {
-		return userDao.getUserByLimit(currentPageNo, pageSize);
+	public List<Sysuser> getAllUserLimit(String usname,Integer roleId,String userTrueName,Integer currentPageNo, Integer pageSize) {
+		return userDao.getUserByLimit(usname,roleId,userTrueName,currentPageNo, pageSize);
 	}
 
 	/**
@@ -127,6 +127,9 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public Integer edit(Sysuser user) {
+		//加密
+		String MD5Pwd = MD5Utils.stringToMD5(user.getUserPwd());
+		user.setUserPwd(MD5Pwd);
 		return userDao.edit(user);
 	}
 
