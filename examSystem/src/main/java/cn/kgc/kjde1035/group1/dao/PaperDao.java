@@ -25,4 +25,5 @@ public interface PaperDao {
 	public List<Subject> subjectList(Paper paper);
 	//学生登录后进入index页面显示全部试题
 	public List<Paper> list(Paper paper);
+	
 }

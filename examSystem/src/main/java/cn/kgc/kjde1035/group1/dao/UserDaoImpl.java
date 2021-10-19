@@ -38,8 +38,8 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	 */
 	@Override
 	public Integer userRegist(Sysuser user) {
-		String sql = "insert into `sysuser`(userName,userPwd) values(?,?)";
-		Object[] params = { user.getUserName(), user.getUserPwd() };
+		String sql = "insert into `sysuser`(userName,userPwd,phone) values(?,?,?)";
+		Object[] params = { user.getUserName(), user.getUserPwd(), user.getPhone() };
 		Integer result = this.executeUpdate(sql, params);
 		return result;
 	}
@@ -179,14 +179,26 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	 * @throws SQLException
 	 */
 	@Override
-	public List<Sysuser> getUserByLimit(Integer pageNo, Integer pageSize) {
+	public List<Sysuser> getUserByLimit(String usname, Integer roleId, String userTrueName, Integer pageNo,
+			Integer pageSize) {
 		List<Sysuser> userList = new ArrayList<Sysuser>();
 		conn = this.getConnection();
-		String sql = "select USERID,ROLEID,USERNAME,USERTRUENAME,USERSTATE from SYSUSER limit ?,?";
+		String sql = "select USERID,ROLEID,USERNAME,USERTRUENAME,USERSTATE from SYSUSER where 1=1";
+		if (usname != null && !"".equals(usname)) {
+			sql += " and  username like '%" + usname + "%'";
+		}
+		if (roleId != 0) {
+			sql += " and ROLEID=" + roleId;
+		}
+		if (userTrueName != null && !"".equals(userTrueName)) {
+			sql += " and userTrueName like '%" + userTrueName + "%'";
+		}
+		sql += " limit ?,?";
 		try {
 			p = conn.prepareStatement(sql);
 			p.setInt(1, (pageNo - 1) * pageSize);
 			p.setInt(2, pageSize);
+
 			rs = p.executeQuery();
 			while (rs.next()) {
 				Sysuser user = new Sysuser();
@@ -211,12 +223,25 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	 * 获取总用户数
 	 */
 	@Override
-	public Integer getTotalCount() {
+	public Integer getTotalCount(String usname, Integer roleId, String userTrueName) {
+
 		Integer result = 0;
 		conn = this.getConnection();
-		String sql = "select count(1) c from sysuser";
+		String sql = "select count(1) c from sysuser where 1=1";
+		if (usname != null && !"".equals(usname)) {
+			sql += " and  username like '%" + usname + "%'";
+
+		}
+		if (roleId != 0) {
+			sql += " and ROLEID=" + roleId;
+		}
+		if (userTrueName != null && !"".equals(userTrueName)) {
+			// sql+=" and userTrueName like "+concat("%",userTrueName,"%");
+			sql += " and userTrueName like '%" + userTrueName + "%'";
+		}
 		try {
 			p = conn.prepareStatement(sql);
+
 			rs = p.executeQuery();
 			while (rs.next()) {
 				result = rs.getInt("c");
@@ -236,7 +261,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	@Override
 	public Sysuser detail(Sysuser user) {
 		conn = this.getConnection();
-		String sql = "SELECT * FROM SYSUSER WHERE USERID=?";
+		String sql = "SELECT A.userid,A.roleid,A.username,A.userpwd,A.usertruename,A.userstate,B.rolename,A.phone FROM sysuser A INNER JOIN sysrole B ON A.roleid=B.roleid WHERE USERID=?";
 		try {
 			p = conn.prepareStatement(sql);
 			p.setInt(1, user.getUserId());
@@ -250,6 +275,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 				user.setUsertruename(rs.getString("usertruename"));
 				user.setUserState(rs.getInt("userState"));
 				user.setRolename(rs.getString("rolename"));
+				user.setPhone(rs.getInt("phone"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -259,25 +285,29 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 		}
 		return user;
 	}
-	
+
 	/**
 	 * 修改用户密码
 	 */
 	@Override
 	public Integer editpwd(Sysuser user) {
 		String sql = "UPDATE SYSUSER SET USERPWD=? WHERE USERID=?";
-		Object[] params = {user.getUserId(),user.getUserPwd()};
+		Object[] params = { user.getUserId(), user.getUserPwd() };
 		return this.executeUpdate(sql, params);
 	}
-	
+
 	/**
 	 * 修改用户
 	 */
 	@Override
 	public Integer edit(Sysuser user) {
-		String sql = "UPDATE SYSUSER SET ROLEID=?,USERNAME=?,"
-				+ "USERPWD=?,USERTRUENAME=?,USERSTATE=? WHERE USERID=?";
-		Object[] params = {user.getRoleId(),user.getUserName(),user.getUserPwd(),user.getUsertruename(),user.getUserState(),user.getUserId()};
+		String sql = "UPDATE SYSUSER SET ROLEID=?,USERPWD=?,USERTRUENAME=?,USERSTATE=?,PHONE=? WHERE USERTRUENAME=?";
+
+		Object[] params = { user.getRoleId(), user.getUserPwd(), user.getUsertruename(), user.getUserState(),
+				user.getPhone(), user.getUsertruename() };
+		for (Object object : params) {
+			System.out.println(object);
+		}
 		return this.executeUpdate(sql, params);
 	}
 

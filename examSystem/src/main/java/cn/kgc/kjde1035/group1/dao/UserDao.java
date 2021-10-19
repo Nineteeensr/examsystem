@@ -40,10 +40,10 @@ public interface UserDao {
 	public Integer add(Sysuser user);
 
 	// 获取用户列表
-	public List<Sysuser> getUserByLimit(Integer pageNo, Integer pageSize);
+	public List<Sysuser> getUserByLimit(String usname,Integer roleId,String userTrueName,Integer pageNo, Integer pageSize);
 
 	// 获取总用户数
-	public Integer getTotalCount();
+	public Integer getTotalCount(String usname,Integer roleId,String userTrueName);
 
 	// 获取用户详细信息
 	public Sysuser detail(Sysuser user);
