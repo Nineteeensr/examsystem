@@ -1,8 +1,12 @@
+
+
+
 package cn.kgc.kjde1035.group1.servlet;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -169,7 +173,9 @@ public class UserServlet extends HttpServlet {
 		Sysuser user = new Sysuser();
 		try {
 			BeanUtils.populate(user, request.getParameterMap());
+			
 			Integer result = userService.editpwd(user);
+			
 			if (result>0) {
 				response.sendRedirect(Tools.Basepath(request, response)+"UserServlet?cmd=list");
 			}else {
@@ -219,6 +225,13 @@ public class UserServlet extends HttpServlet {
 		Sysuser user = new Sysuser();
 		try {
 			BeanUtils.populate(user, request.getParameterMap());
+			String userid= request.getParameter("userid");
+			String userPwd = request.getParameter("userpwd");
+			String usertruename = request.getParameter("usertruename");
+			String userstate = request.getParameter("userstate");
+			String phone = request.getParameter("phone");
+			String roleid = request.getParameter("roleid");
+			user = new Sysuser(userPwd,usertruename, Integer.parseInt(userstate), Integer.parseInt(phone),Integer.parseInt(roleid));
 			Integer result = userService.edit(user);
 			if(result>0){			
 				response.sendRedirect(Tools.Basepath(request, response)+"UserServlet?cmd=list");
@@ -247,8 +260,8 @@ public class UserServlet extends HttpServlet {
 		user.setUserId(Integer.parseInt(request.getParameter("id")));
 		user = userService.detail(user);
 		if (user!=null) {
-			request.setAttribute("user",user);
-			request.getRequestDispatcher("/sys/user/editpwd.jsp").forward(request, response);
+			request.setAttribute("item",user);
+			request.getRequestDispatcher("/sys/user/edit.jsp").forward(request, response);
 		}else {
 			request.setAttribute("msg", "需要修改的用户不存在");
 			request.getRequestDispatcher("/error.jsp").forward(request, response);
@@ -304,39 +317,53 @@ public class UserServlet extends HttpServlet {
 	 */
 	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			PageLimitUtil<Sysuser> pages = new PageLimitUtil<Sysuser>();
-			// 从前端接收当前页码
-			String currNo = request.getParameter("currNo");
-			// 保存当前页码
-			Integer currentPageNo = 0;
-			if (currNo == null) {// 第一次访问页面是 显示为第一页
-				currentPageNo = 1;
-			} else {
-				currentPageNo = Integer.parseInt(currNo);
+			List<Sysuser> userList = new ArrayList<Sysuser>();
+			String usname = request.getParameter("usname");
+			String userTrueName = request.getParameter("ustruename");
+			String roleId = request.getParameter("usroleid");
+			Integer rId=0;
+			if(roleId!=null&&!"".equals(roleId)) {
+				rId=Integer.parseInt(roleId);
 			}
-			// 从数据库中获取总记录数
-			Integer totalCount = userService.getTotalCount();
-			// 给pages的总记录数赋值
-			pages.setTotalCount(totalCount);
-			// 获取总页数
-			Integer totalPageCount = pages.getTotalPageCount();
-			// 控制当前页码
-			if (currentPageNo < 1) {
-				currentPageNo = 1;
-			}
-			if (currentPageNo > totalPageCount) {
-				currentPageNo = totalPageCount;
-			}
-			// 给pages的当前页码赋值
-			pages.setCurrentPageNo(currentPageNo);
-			// 获取当前页的数据
-			List<Sysuser> userList = userService.getAllUserLimit(currentPageNo, pages.getPageSize());
-			// 给pages类中的list赋值
-			pages.setList(userList);
-			// 将pages存到request作用域中 将数据从servlet层传到前端显示
-			request.setAttribute("pages", pages);
+				Sysuser user = new Sysuser();
+				user.setUserName(usname); 
+				
+				// 从前端接收当前页码
+				String currNo = request.getParameter("currNo");
+				// 保存当前页码
+				Integer currentPageNo = 0;
+				if (currNo == null) {// 第一次访问页面是 显示为第一页
+					currentPageNo = 1;
+				} else {
+					currentPageNo = Integer.parseInt(currNo);
+				}
+				// 从数据库中获取总记录数
+				Integer totalCount = userService.getTotalCount(usname,rId,userTrueName);
+				// 给pages的总记录数赋值
+				pages.setTotalCount(totalCount);
+				// 获取总页数
+				Integer totalPageCount = pages.getTotalPageCount();
+				// 控制当前页码
+				if (currentPageNo < 1) {
+					currentPageNo = 1;
+				}
+				if (currentPageNo > totalPageCount) {
+					currentPageNo = totalPageCount;
+				}
+				// 给pages的当前页码赋值
+				pages.setCurrentPageNo(currentPageNo);
+				// 获取当前页的数据
+				userList = userService.getAllUserLimit(usname,rId,userTrueName,currentPageNo, pages.getPageSize());
+				// 给pages类中的list赋值
+				pages.setList(userList);
+				// 将pages存到request作用域中 将数据从servlet层传到前端显示
+				request.setAttribute("pages", pages);
 
-			request.getRequestDispatcher("/sys/user/list.jsp").forward(request, response);
-		
+				request.getRequestDispatcher("/sys/user/list.jsp").forward(request, response);
+			
+				
+			
+			
 	}
 
 	/**
