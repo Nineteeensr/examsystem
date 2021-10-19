@@ -19,6 +19,14 @@ public class Sysuser {
 	private Integer userState;
 
 	private String rolename;
+	private Integer phone;
+	public Integer getPhone() {
+		return phone;
+	}
+
+	public void setPhone(Integer phone) {
+		this.phone = phone;
+	}
 
 	public Integer getUserId() {
 		return userId;
@@ -81,8 +89,10 @@ public class Sysuser {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+
 	public Sysuser(Integer userId, Integer roleId, String userName, String usertruename, String userPwd,
-			Integer userState, String rolename) {
+			Integer userState, String rolename, Integer phone) {
 		super();
 		this.userId = userId;
 		this.roleId = roleId;
@@ -91,6 +101,7 @@ public class Sysuser {
 		this.userPwd = userPwd;
 		this.userState = userState;
 		this.rolename = rolename;
+		this.phone = phone;
 	}
 
 	public Sysuser(String userName, String userPwd) {
@@ -99,4 +110,20 @@ public class Sysuser {
 		this.userPwd = userPwd;
 	}
 
+	public Sysuser(String userName, String userPwd, Integer phone) {
+		super();
+		this.userName = userName;
+		this.userPwd = userPwd;
+		this.phone = phone;
+	}
+
+	public Sysuser( String userPwd, String usertruename, Integer userState, Integer phone,Integer roleId) {
+		super();
+		this.userPwd = userPwd;
+		this.usertruename = usertruename;
+		this.userState = userState;
+		this.phone = phone;
+		this.roleId = roleId;
+	}
+	
 }
