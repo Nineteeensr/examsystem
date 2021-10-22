@@ -8,7 +8,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title></title>
+		<title>找回密码</title>
 		<link rel="stylesheet" type="text/css" href="<%=basePath %>css/yfregist.css"/>
 		<!-- <link rel="stylesheet" href="./iconfont.css"> -->
 	</head>
@@ -33,7 +33,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="top">
 								
 								<div class="top1">
-									<a href="#">注册新账号</a>
+									<a href="#">找回密码</a>
 								</div>
 								<div class="bottoms">
 									<div class="bottoms1">
@@ -42,16 +42,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								</div>
 							</div>
 							
-							<form action="RegistServlet" method="post" id="registForm">
-							<input type="text" name="userName" id="" required="required" placeholder="用户名" class="input2" value="" />
-							<input type="text" name="trueName" id=""  required="required" placeholder="真实姓名" class="input2" value="" />
+							<form action="ForgetpwdServlet" method="post" id="registForm">
 							<input type="text" name="phone" id="phoneNum"  required="required" placeholder="手机号码" class="input3" value="" />
 							<div id="phoneWaring"></div>
 							<input type="text" name="phoneCode" id="phoneCode" required="required"  placeholder="输入验证码" class="input4" value="" />
 							<input type="button" name="" id="getCode" onclick="sendCode(this)" class="input1s" value="发送验证码" />
 							<div id="codeWaring"></div>
-							<input type="password" name="userPwd" id="" placeholder="密码" class="input5" required="required"  value="" />
-							<input type="submit" name="" id="" class="input2s" value="注册" />
+							<input type="password" name="userPwd" id="" placeholder="新密码" class="input5" required="required"  value="" />
+							<input type="submit" name="" id="" class="input2s" value="确认" />
 							<a href="login.jsp" class="lianjie">已有账号？</a>
 							</form>
 						</div>

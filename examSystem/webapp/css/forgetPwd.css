@@ -1,0 +1,242 @@
+/* 全局属性清除内外边距 */
+*{
+	margin: 0px;
+	padding: 0px;
+}
+body{
+	background-image: url(../img/bg.d47fb98b.png);
+}
+.top{
+	width: 1556px;
+	height:60px;
+	background-color:RGB(51,51,51);
+}
+/* 顶部logo  */
+.top-img{
+	width: 140px;
+	height: 44px;
+	/* border: 1px solid black; */
+	margin-left: 194.5px;
+	padding-top: 5px;
+}
+/* logo图片 */
+.top-img img{
+	width:100px;
+	height: 60px;
+}
+/* *******************中间部分**************** */
+/* 中间部分 */
+.center{
+	width: 1556px;
+	height: 449.6px;
+}
+/* 左侧大图片 */
+.left-img{
+	width: 699px;
+	height: 499.6px;
+	margin-left:274.5px;
+	padding-top: 150px;
+}
+/* 左侧图片样式 */
+.left-img img{
+	width: 429px;
+	height: 256px;
+}
+/* 右侧登录栏 */
+.right-do{
+	width: 447px;
+	height: 500px;
+	border: 1px solid #DDDDDD;
+	margin-left: 900px;
+	margin-top: -600px;
+}
+/* 学生登录和管理员登录 */
+.student{
+	width: 370px;
+	height: 30px;
+	margin-left: 30px;
+}
+.student p{
+	display: inline-block;
+	padding-top: 13px;
+}
+.student p:nth-of-type(1){
+	margin-right: 190px;
+	margin-left: 20px;
+}
+/* 文字样式 */
+.student a{
+	text-decoration: none;
+	font-size: 15px;
+}
+/* 顶部登录文字部分 */
+.zhanhao{
+	height: 60px;
+	width: 320px;
+	line-height: 60px;
+	padding: 5px 30px;
+	margin-left: 30px;
+	margin-bottom: 10px;
+	border-bottom: 3px solid gray;
+}
+/* 文字位置控制 */
+.zhanhao p{
+	width: 100px;
+	height: 65px;
+	margin-left: -30px;
+	/* border-bottom: 3px solid #1890FF; */
+}
+/* 文字字体样式控制 */
+.zhanhao a{
+	text-decoration: none;
+	color: #1890FF;
+	font-size: 15px;
+}
+/* 用户信息输入框 */
+.user{
+	width: 360px;
+	height: 40px;
+	margin-left: 30px;
+}
+/* 图标存放框 */
+.user span{
+	width: 25px;
+	height: 36px;
+	position: relative;
+	top: 33px;
+	left: 10px;
+}
+/* 图标大小 */
+.user span img{
+	width: 16px;
+	height: 18px;
+}
+/* 表单 */
+#usre{
+	width: 345px;
+	height: 36px;
+	padding-left: 30px;
+}
+/* 手机号输入框 */
+.phone{
+	width: 360px;
+	height: 40px;
+	margin: 30px;
+}
+/* 图标存放框 */
+.phone span{
+	width: 25px;
+	height: 36px;
+	position: relative;
+	top: 34px;
+	left: 10px;
+}
+/* 密码输入框 */
+.pass{
+	width: 360px;
+	height: 40px;
+	margin: 30px;
+}
+/* 图标存放框 */
+.pass span{
+	width: 25px;
+	height: 36px;
+	position: relative;
+	top: 34px;
+	left: 10px;
+}
+/* 图标大小 */
+.pass span img{
+	width: 20px;
+	height: 22px;
+}
+/* 表单 */
+#pass{
+	width: 345px;
+	height: 36px;
+	padding-left: 30px;
+}
+/* ******* */
+/* 验证码 */
+.yanzheng{
+	width: 375px;
+	height: 40px;
+	border: 1px solid #DCDFE6;
+	margin-left: 30px;
+	margin-top: 60px;
+	position: relative;
+}
+/* 装图片的盒子 */
+.getyz{
+	width: 108px;
+	height: 40px;
+	display: inline-block;
+	border-right: 1px solid #DCDFE6;
+}
+/* 按钮大小 */
+.getyz button{
+	width: 90%;
+	height: 100%;
+	margin-left: 280px;
+}
+/* 表单 */
+#yanzheng{
+	width: 245px;
+	height: 38px;
+	font-size: 15px;
+	padding-left: 20px;
+	outline: aliceblue;
+	position: absolute;
+	border: none;
+}
+/* ******************************* */
+/* 登录按钮 */
+.deng{
+	width: 375px;
+	height: 40px;
+	background-color: #46A6FF;
+	margin-top: 35px;
+	margin-left: 30px;
+}
+/* 提交表单 */
+#submit{
+	width: 375px;
+	height: 40px;
+	background-color: #46A6FF;
+	border: none;
+	color: #FFFFFF;
+	font-size: 18px;
+}
+/* 注册及忘记密码 */
+.zhuce{
+	width: 360px;
+	height: 30px;
+	margin-left: 30px;
+}
+.zhuce p{
+	display: inline-block;
+	margin-top: 15px;
+	font-size: 13px;
+	margin-left: 5px;
+}
+.zhuce p:nth-of-type(1){
+	margin-left: 210px;
+}
+.zhuce p a{
+	text-decoration: none;
+	color: #606266;
+}
+/* 底部 */
+.footer{
+	width: 1556px;
+	height: 60px;
+	background-color: #333333;
+	position: absolute;
+	bottom: 0px;
+}
+.footer p{
+	font-size: 18px;
+	color: #A3A8B0;
+	line-height: 60px;
+	margin-left: 180px;
+}
