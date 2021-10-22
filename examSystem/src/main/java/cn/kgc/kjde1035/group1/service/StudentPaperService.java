@@ -14,16 +14,23 @@ package cn.kgc.kjde1035.group1.service;
 import java.util.List;
 
 import cn.kgc.kjde1035.group1.entity.Studentpaper;
+import cn.kgc.kjde1035.group1.entity.Subject;
 
 /**
  * @author 10217
  *
  */
 public interface StudentPaperService {
-	//学生提交答案
+	// 学锟斤拷锟结交锟斤拷
 	public Integer addPaper(Studentpaper studentpaper);
-	//获取学生所有错题列表
-	public  List<Studentpaper> list(String spId,Integer userId,Integer pageNo, Integer pageSize);
-	//获取学生错题数
-	public Integer getTotalCount(String spId,Integer userId);
+
+	public List<Studentpaper> showLimit(Integer currentPageNo, Integer pageSize, Integer userId);
+
+	public Integer getPaperTotalCount(Integer userId);
+
+	public List<Subject> findAllErr(String spid, String pname, Integer userid, Integer currentPageNo, Integer pageSize);
+
+	public Integer ErrTotalCountInPaper(String spid, String pname, Integer userid);
+	public Boolean addPapers(List<Studentpaper> stupList);
+	public Integer rightTotalCountInPaper(String spid, String pname, Integer userid);
 }

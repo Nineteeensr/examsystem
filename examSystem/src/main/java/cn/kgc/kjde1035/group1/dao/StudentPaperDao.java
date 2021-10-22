@@ -16,6 +16,7 @@ package cn.kgc.kjde1035.group1.dao;
 import java.util.List;
 
 import cn.kgc.kjde1035.group1.entity.Studentpaper;
+import cn.kgc.kjde1035.group1.entity.Subject;
 import cn.kgc.kjde1035.group1.entity.Sysuser;
 
 /**
@@ -23,10 +24,17 @@ import cn.kgc.kjde1035.group1.entity.Sysuser;
  *
  */
 public interface StudentPaperDao {
-	//学生提交答案
+	// 学锟斤拷锟结交锟斤拷
 	public Integer addPaper(Studentpaper studentpaper);
-	//获取总记录数
-	public Integer getTotalCount(String spId,Integer userId);
-	//查询学生所有错题列表
-	public  List<Studentpaper> list(String spId,Integer userId,Integer pageNo, Integer pageSize);
+
+	public List<Studentpaper> showLimit(Integer currentPageNo, Integer pageSize, Integer userid);
+
+	public Integer queryStudentPaperTotalCount(Integer userId);
+
+	public Integer queryErrSubjectTotalCount(String spid, String pname, Integer userid);
+
+	public List<Subject> queryAllErr(String spid, String pname, Integer userid, Integer currentPageNo,
+			Integer pageSize);
+	public Boolean addPapers(List<Studentpaper> stupList);
+	public Integer queryRightSubjectTotalCount(String spid, String pname, Integer userid);
 }

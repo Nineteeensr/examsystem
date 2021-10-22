@@ -3,6 +3,8 @@ package cn.kgc.kjde1035.group1.servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -12,7 +14,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
+
 import cn.kgc.kjde1035.group1.entity.Studentpaper;
+import cn.kgc.kjde1035.group1.entity.Subject;
+import cn.kgc.kjde1035.group1.entity.Sysuser;
 import cn.kgc.kjde1035.group1.service.StudentPaperService;
 import cn.kgc.kjde1035.group1.service.StudentPaperServiceImpl;
 import cn.kgc.kjde1035.group1.utils.PageLimitUtil;
@@ -23,96 +29,130 @@ import cn.kgc.kjde1035.group1.utils.PageLimitUtil;
 @WebServlet("/StudentPaperServlet")
 public class StudentPaperServlet extends HttpServlet {
 	StudentPaperService service = new StudentPaperServiceImpl();
+
 	@Override
-	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		String cmd = request.getParameter("cmd");
-		if(cmd.equals("list")){
-			list(request,response);
-		}else if(cmd.equals("score")){
-			score(request,response);
-		}else if(cmd.equals("stupaper")){
-			StudentPaperList(request,response);
+		if (cmd.equals("list")) {
+			list(request, response);
+		} else if (cmd.equals("score")) {
+			score(request, response);
+		} else if (cmd.equals("sublist")) {
+			subList(request, response);
+		} else if (cmd.equals("answer")) {
+			answer(request, response);
 		}
 	}
 
-	/**
-	 * @throws IOException 
-	 * @throws ServletException    
-	 * @Title: list   
-	 * @Description: (²éÑ¯ÏêÏ¸´íÌâ)   
-	 * @param: @param request
-	 * @param: @param response
-	 * @return:	void
-	 * @throws   
-	 *
-	 */
-	private void list(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		List<Studentpaper> list = new ArrayList<Studentpaper>();
-		Studentpaper stupaper = new Studentpaper();
-		PageLimitUtil<Studentpaper> pages = new PageLimitUtil<Studentpaper>();
-		String userId=(String) ((HttpServletRequest) request).getSession().getAttribute("userid");
-		String spId = request.getParameter("spid");
-		// ´ÓÇ°¶Ë½ÓÊÕµ±Ç°Ò³Âë
-		String currNo = request.getParameter("currNo");
-		// ±£´æµ±Ç°Ò³Âë
+	// è®¡ç®—å¾—åˆ†
+	private void score(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		String userid = request.getParameter("userid");
+		String spid = request.getParameter("spid");
+		String pname = request.getParameter("pname");
+		List<Subject> subList = service.findAllErr(spid, pname, Integer.parseInt(userid), 0, 0);
+		System.out.println("å¾—åˆ†æ—¶çš„"+spid);
+		Integer count = service.rightTotalCountInPaper(spid, pname, Integer.parseInt(userid));
+		request.setAttribute("score", count);
+		response.getWriter().print("æ‚¨æœ¬æ¬¡å¾—åˆ†" + count * 2 + "!");
+
+	}
+
+	// å°†å­¦ç”Ÿçš„è€ƒè¯•è®°å½•å­˜å…¥æ•°æ®åº“
+	private void answer(HttpServletRequest request, HttpServletResponse response) {
+		Integer userId = (Integer)request.getSession().getAttribute("userid");
+		String[] studentkeys = request.getParameterValues("studentkey");
+		String[] studentState = request.getParameterValues("studentstate");
+		String pname = request.getParameter("pname");
+		String spid = request.getParameter("spid");
+		System.out.println("äº¤å·æ—¶ï¼š" + spid);
+		request.setAttribute("spid", spid);
+		String[] sid = request.getParameterValues("sid");
+		List<Studentpaper> stuPList = new ArrayList<Studentpaper>();
+		for (int i = 0; i < studentkeys.length; i++) {
+			Studentpaper stuPaper = new Studentpaper();
+			stuPaper.setUserid(userId);
+			stuPaper.setStudentkey(studentkeys[i]);
+			stuPaper.setStudentstate(Integer.parseInt(studentState[i]));
+			stuPaper.setPname(pname);
+			stuPaper.setSpid(spid);
+			stuPaper.setSid(Integer.parseInt(sid[i]));
+			stuPList.add(stuPaper);
+		}
+		Boolean result = service.addPapers(stuPList);
+
+		/*
+		 * System.out.println(""); Map<String, String[]> pMap =
+		 * request.getParameterMap(); Set<String> keySet = pMap.keySet(); for (String
+		 * key : keySet) { String[] value = pMap.get(key); System.out.println(key); for
+		 * (String string : value) { System.out.println("   " + string); } }
+		 */
+
+	}
+
+	// æ˜¾ç¤ºè¯•å·ä¸­çš„é”™é¢˜
+	private void subList(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String currenNo = request.getParameter("currentPageNo");
 		Integer currentPageNo = 0;
-		if (currNo == null) {// µÚÒ»´Î·ÃÎÊÒ³ÃæÊÇ ÏÔÊ¾ÎªµÚÒ»Ò³
+		if (currenNo == null) {
 			currentPageNo = 1;
 		} else {
-			currentPageNo = Integer.parseInt(currNo);
+			currentPageNo = Integer.parseInt(currenNo);
+			if (currentPageNo < 1)
+				currentPageNo = 1;
 		}
-		// ´ÓÊı¾İ¿âÖĞ»ñÈ¡×Ü¼ÇÂ¼Êı
-		Integer totalCount = service.getTotalCount(spId,Integer.parseInt(userId));
-		// ¸øpagesµÄ×Ü¼ÇÂ¼Êı¸³Öµ
+		String pname = request.getParameter("pname");
+		String spid = request.getParameter("spid");
+		Integer userid = (Integer) request.getSession().getAttribute("userid");
+		System.out.println("ERRO:" + userid);
+		Integer totalCount = service.ErrTotalCountInPaper(spid, pname, userid);
+		PageLimitUtil<Subject> pages = new PageLimitUtil<Subject>();
 		pages.setTotalCount(totalCount);
-		// »ñÈ¡×ÜÒ³Êı
-		Integer totalPageCount = pages.getTotalPageCount();
-		// ¿ØÖÆµ±Ç°Ò³Âë
-		if (currentPageNo < 1) {
-			currentPageNo = 1;
+		if (currentPageNo > pages.getTotalPageCount()) {
+			currentPageNo = pages.getTotalPageCount();
 		}
-		if (currentPageNo > totalPageCount) {
-			currentPageNo = totalPageCount;
-		}
-		// ¸øpagesµÄµ±Ç°Ò³Âë¸³Öµ
 		pages.setCurrentPageNo(currentPageNo);
-		// »ñÈ¡µ±Ç°Ò³µÄÊı¾İ
-		list = service.list(spId, Integer.parseInt(userId), currentPageNo, pages.getPageSize());
-		// ¸øpagesÀàÖĞµÄlist¸³Öµ
-		pages.setList(list);
-		// ½«pages´æµ½request×÷ÓÃÓòÖĞ ½«Êı¾İ´Óservlet²ã´«µ½Ç°¶ËÏÔÊ¾
+		List<Subject> subList = service.findAllErr(spid, pname, userid, currentPageNo, pages.getPageSize());
+		for (Subject subject : subList) {
+			System.out.println(subject);
+		}
+		pages.setList(subList);
+		pages.setMinAndMax();
 		request.setAttribute("pages", pages);
-
-		request.getRequestDispatcher("/user/paper/studenterror.jsp").forward(request, response);
+		request.getRequestDispatcher("user/paper/studenterror.jsp").forward(request, response);
 	}
 
-	/**   
-	 * @Title: score   
-	 * @Description: (²éÑ¯ÊÔ¾íµÃ·Ö)   
-	 * @param: @param request
-	 * @param: @param response
-	 * @return:	void
-	 * @throws   
-	 *
-	 */
-	private void score(ServletRequest request, ServletResponse response) {
-		// TODO Auto-generated method stub
-		
-	}
+	// æ˜¾ç¤ºåšè¿‡çš„è¯•å·
+	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String currenNo = request.getParameter("currentPageNo");
+		Integer currentPageNo = 0;
+		if (currenNo == null) {
+			currentPageNo = 1;
+		} else {
+			currentPageNo = Integer.parseInt(currenNo);
+			if (currentPageNo < 1)
+				currentPageNo = 1;
+		}
+		Integer userId = (Integer) request.getSession().getAttribute("userid");
+		Sysuser user = (Sysuser) request.getSession().getAttribute("user");
+		System.out.println(user);
+		System.out.println(userId);
+		Integer totalCount = service.getPaperTotalCount(userId);
+		PageLimitUtil<Studentpaper> pages = new PageLimitUtil<Studentpaper>();
+		pages.setTotalCount(totalCount);
+		if (currentPageNo > pages.getTotalPageCount()) {
+			currentPageNo = pages.getTotalPageCount();
+		}
+		pages.setCurrentPageNo(currentPageNo);
+		List<Studentpaper> stuPaperList = service.showLimit(pages.getCurrentPageNo(), pages.getPageSize(), userId);
+		pages.setList(stuPaperList);
+		pages.getMaxPageNo();
+		request.setAttribute("pages", pages);
+		request.getRequestDispatcher("user/paper/studentpaper.jsp").forward(request, response);
 
-	/**   
-	 * @Title: StudentPaperList   
-	 * @Description: (²éÑ¯ÏêÏ¸´íÌâ)   
-	 * @param: @param request
-	 * @param: @param response
-	 * @return:	void
-	 * @throws   
-	 *
-	 */
-	private void StudentPaperList(ServletRequest request, ServletResponse response) {
-		// TODO Auto-generated method stub
-		
 	}
-	
 
 }

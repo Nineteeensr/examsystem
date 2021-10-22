@@ -25,10 +25,11 @@ import cn.kgc.kjde1035.group1.entity.Subject;
  * @author 10217
  *
  */
-public class PaperDaoImpl extends BaseDao implements PaperDao{
+public class PaperDaoImpl extends BaseDao implements PaperDao {
 	Connection conn = null;
-	PreparedStatement p = null;
+	PreparedStatement pstmt = null;
 	ResultSet rs = null;
+
 	/**
 	 * 学生点击试卷获取试题
 	 */
@@ -38,10 +39,10 @@ public class PaperDaoImpl extends BaseDao implements PaperDao{
 		conn = this.getConnection();
 		String sql = "SELECT subject.sid,scontent,sa,sb,sc,sd,skey FROM subject,paper WHERE paper.sid = subject.sid and paper.pname = ?";
 		try {
-			p = conn.prepareStatement(sql);
-			p.setString(1, paper.getPname());
-			rs = p.executeQuery();
-			while(rs.next()) {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paper.getPname());
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
 				Subject subject = new Subject();
 				subject.setSid(rs.getInt("sid"));
 				subject.setScontent(rs.getString("scontent"));
@@ -55,11 +56,12 @@ public class PaperDaoImpl extends BaseDao implements PaperDao{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
-			this.closeAll(rs, conn, p);
+		} finally {
+			this.closeAll(rs, conn, pstmt);
 		}
 		return subjectList;
 	}
+
 	/**
 	 * 学生登录进入index显示全部试题
 	 */
@@ -69,9 +71,9 @@ public class PaperDaoImpl extends BaseDao implements PaperDao{
 		conn = this.getConnection();
 		String sql = "SELECT pname,count(*) scount FROM paper GROUP BY pname";
 		try {
-			p = conn.prepareStatement(sql);
-			rs = p.executeQuery();
-			while(rs.next()) {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
 				paper = new Paper();
 				paper.setPname(rs.getString("pname"));
 				paper.setScount(rs.getInt("scount"));
@@ -80,10 +82,123 @@ public class PaperDaoImpl extends BaseDao implements PaperDao{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
-			this.closeAll(rs, conn, p);
+		} finally {
+			this.closeAll(rs, conn, pstmt);
 		}
 		return list;
 	}
-	
+
+	// 生成试卷
+	@Override
+	public Integer addPaper(Paper paper) {
+		String sql = "INSERT INTO paper(pname,sid) SELECT ?,sid FROM subject where sstate = 1 ORDER BY rand() LIMIT ?";
+		Object[] params = { paper.getPname(), paper.getScount() };
+		return this.executeUpdate(sql, params);
+	}
+
+	// 查看试题内容
+	@Override
+	public List<Subject> getSubjectListByPname(String pname) {
+		List<Subject> subjectlist = new ArrayList<Subject>();
+		conn = this.getConnection();
+		String sql = "select subject.sid,scontent,sa,sb,sc,sd,skey from subject,paper where paper.sid=subject.sid and paper.pname=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, pname);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Subject subject = new Subject(rs.getInt("subject.sid"), rs.getString("scontent"), rs.getString("sa"),
+						rs.getString("sb"), rs.getString("sc"), rs.getString("sd"), rs.getString("skey"));
+				subjectlist.add(subject);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			this.closeAll(rs, conn, pstmt);
+		}
+		return subjectlist;
+	}
+
+//		// 显示全部试卷
+//		@Override
+//		public List<Paper> getPaperListByPname(String pname) {
+//			List<Paper> paperList = new ArrayList<Paper>();
+//			conn = this.getConnection();
+//			String sql = "SELECT pname,count(sid) scount FROM paper GROUP BY pname";
+//			try {
+//				pstmt = conn.prepareStatement(sql);
+//				rs = pstmt.executeQuery();
+//				while (rs.next()) {
+//					Paper paper = new Paper(null, rs.getString("pname"), rs.getInt("scount"));
+//					paperList.add(paper);
+//				}
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			} finally {
+//				this.closeAll(rs, conn, pstmt);
+//			}
+//			return paperList;
+//		}
+
+	// 删除试卷
+	@Override
+	public Integer delect(String pname) {
+		String sql = "delete from paper where pname=?";
+		Object[] params = { pname };
+		return this.executeUpdate(sql, params);
+	}
+
+	/**
+	 * 获取总试卷数
+	 */
+	@Override
+	public Integer getTotalCount(String pname) {
+		Integer result = 0;
+		conn = this.getConnection();
+		String sql = "SELECT COUNT(s.pname) c FROM (SELECT pname,COUNT(*) scount FROM paper GROUP BY pname) s";
+		if (pname != null && !"".equals(pname)) {
+			sql += " where pname like '%" + pname + "%'";
+		}
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				result = rs.getInt("c");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			this.closeAll(rs, conn, pstmt);
+		}
+		return result;
+	}
+
+	// 分页查询全部试卷
+	@Override
+	public List<Paper> getPaperListByLimit(String pname, int currentPageNo, int pageSize) {
+		List<Paper> paperList = new ArrayList<Paper>();
+		Paper paper = null;
+		conn = this.getConnection();
+		String sql = "SELECT pname,count(*) scount FROM paper ";
+		if (pname != null && !"".equals(pname)) {
+			sql += "where pname like '%" + pname + "%'";
+		}
+		sql += " group by pname limit ?,?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, (currentPageNo - 1) * pageSize);
+			pstmt.setInt(2, pageSize);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				paper = new Paper(rs.getString("pname"), rs.getInt("scount"));
+				paperList.add(paper);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			this.closeAll(rs, conn, pstmt);
+		}
+		return paperList;
+	}
 }

@@ -9,7 +9,7 @@ package cn.kgc.kjde1035.group1.entity;
 public class Sysuser {
 
 	/**
-	 * 注意写注�?
+	 * 注意写注�?
 	 */
 	private Integer userId;
 	private Integer roleId;
@@ -17,14 +17,16 @@ public class Sysuser {
 	private String usertruename;
 	private String userPwd;
 	private Integer userState;
+	
 
 	private String rolename;
-	private Integer phone;
-	public Integer getPhone() {
+	private String phone;
+
+	public String getPhone() {
 		return phone;
 	}
 
-	public void setPhone(Integer phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
@@ -89,10 +91,8 @@ public class Sysuser {
 		// TODO Auto-generated constructor stub
 	}
 
-	
-
 	public Sysuser(Integer userId, Integer roleId, String userName, String usertruename, String userPwd,
-			Integer userState, String rolename, Integer phone) {
+			Integer userState, String rolename, String phone) {
 		super();
 		this.userId = userId;
 		this.roleId = roleId;
@@ -110,14 +110,14 @@ public class Sysuser {
 		this.userPwd = userPwd;
 	}
 
-	public Sysuser(String userName, String userPwd, Integer phone) {
+	public Sysuser(String userName, String userPwd, String phone) {
 		super();
 		this.userName = userName;
 		this.userPwd = userPwd;
 		this.phone = phone;
 	}
 
-	public Sysuser( String userPwd, String usertruename, Integer userState, Integer phone,Integer roleId) {
+	public Sysuser(String userPwd, String usertruename, Integer userState, String phone, Integer roleId) {
 		super();
 		this.userPwd = userPwd;
 		this.usertruename = usertruename;

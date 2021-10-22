@@ -24,33 +24,41 @@ import cn.kgc.kjde1035.group1.utils.PageLimitUtil;
  *
  */
 public interface UserDao {
-	// ×¢²á
+	// ×¢ï¿½ï¿½
 	public Integer userRegist(Sysuser user);
 
-	// µÇÂ¼
+	// ï¿½ï¿½Â¼
 	public Sysuser login(Sysuser user);
 
-	// ³õÊ¼»¯ÓÃ»§¹¦ÄÜÁÐ±í
+	// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 	public List<SysFunction> initpage(Sysuser user);
 
-	// Ñ§ÉúµÇÂ¼
+	// Ñ§ï¿½ï¿½ï¿½ï¿½Â¼
 	public Sysuser stulogin(Sysuser user);
 
-	// ÐÂÔöÓÃ»§
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½
 	public Integer add(Sysuser user);
 
-	// »ñÈ¡ÓÃ»§ÁÐ±í
-	public List<Sysuser> getUserByLimit(String usname,Integer roleId,String userTrueName,Integer pageNo, Integer pageSize);
+	// ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½Ð±ï¿½
+	public List<Sysuser> getUserByLimit(String usname, Integer roleId, String userTrueName, Integer pageNo,
+			Integer pageSize);
 
-	// »ñÈ¡×ÜÓÃ»§Êý
-	public Integer getTotalCount(String usname,Integer roleId,String userTrueName);
+	// ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½
+	public Integer getTotalCount(String usname, Integer roleId, String userTrueName);
 
-	// »ñÈ¡ÓÃ»§ÏêÏ¸ÐÅÏ¢
+	// ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½Ï¢
 	public Sysuser detail(Sysuser user);
-	
-	// ÐÞ¸ÄÓÃ»§ÃÜÂë
+
+	// ï¿½Þ¸ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
 	public Integer editpwd(Sysuser user);
-	
-	// ÐÞ¸ÄÓÃ»§
+
+	// ï¿½Þ¸ï¿½ï¿½Ã»ï¿½
 	public Integer edit(Sysuser user);
+
+	// Í¨ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Å²ï¿½Ñ¯ï¿½Ã»ï¿½ï¿½ï¿½Ï¢
+	public Sysuser findUserInfo(Sysuser user);
+
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	public Integer forgetPwd(Sysuser user);
+	
 }

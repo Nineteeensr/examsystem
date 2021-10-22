@@ -34,18 +34,18 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	ResultSet rs = null;
 
 	/**
-	 * ×¢²á
+	 * ×¢ï¿½ï¿½
 	 */
 	@Override
 	public Integer userRegist(Sysuser user) {
-		String sql = "insert into `sysuser`(userName,userPwd,phone) values(?,?,?)";
-		Object[] params = { user.getUserName(), user.getUserPwd(), user.getPhone() };
+		String sql = "insert into `sysuser`(userName,userPwd,phone,usertruename) values(?,?,?,?)";
+		Object[] params = { user.getUserName(), user.getUserPwd(), user.getPhone(),user.getUsertruename() };
 		Integer result = this.executeUpdate(sql, params);
 		return result;
 	}
 
 	/**
-	 * µÇÂ¼
+	 * ï¿½ï¿½Â¼
 	 */
 	@Override
 	public Sysuser login(Sysuser user) {
@@ -78,7 +78,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	}
 
 	/**
-	 * ³õÊ¼»¯ÓÃ»§¹¦ÄÜÁÐ±í
+	 * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 	 */
 	@Override
 	public List<SysFunction> initpage(Sysuser user) {
@@ -130,7 +130,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	}
 
 	/**
-	 * Ñ§ÉúµÇÂ¼
+	 * Ñ§ï¿½ï¿½ï¿½ï¿½Â¼
 	 */
 	@Override
 	public Sysuser stulogin(Sysuser user) {
@@ -163,7 +163,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	}
 
 	/**
-	 * ÏµÍ³ÐÂÔöÓÃ»§
+	 * ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½
 	 */
 	@Override
 	public Integer add(Sysuser user) {
@@ -174,7 +174,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	}
 
 	/**
-	 * »ñÈ¡ÓÃ»§ÁÐ±í
+	 * ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½Ð±ï¿½
 	 * 
 	 * @throws SQLException
 	 */
@@ -220,7 +220,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	}
 
 	/**
-	 * »ñÈ¡×ÜÓÃ»§Êý
+	 * ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½
 	 */
 	@Override
 	public Integer getTotalCount(String usname, Integer roleId, String userTrueName) {
@@ -256,7 +256,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	}
 
 	/**
-	 * »ñÈ¡ÓÃ»§ÏêÏ¸ÐÅÏ¢
+	 * ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½Ï¢
 	 */
 	@Override
 	public Sysuser detail(Sysuser user) {
@@ -275,7 +275,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 				user.setUsertruename(rs.getString("usertruename"));
 				user.setUserState(rs.getInt("userState"));
 				user.setRolename(rs.getString("rolename"));
-				user.setPhone(rs.getInt("phone"));
+				user.setPhone(rs.getString("phone"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -287,7 +287,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	}
 
 	/**
-	 * ÐÞ¸ÄÓÃ»§ÃÜÂë
+	 * ï¿½Þ¸ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	@Override
 	public Integer editpwd(Sysuser user) {
@@ -297,7 +297,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	}
 
 	/**
-	 * ÐÞ¸ÄÓÃ»§
+	 * ï¿½Þ¸ï¿½ï¿½Ã»ï¿½
 	 */
 	@Override
 	public Integer edit(Sysuser user) {
@@ -310,5 +310,40 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 		}
 		return this.executeUpdate(sql, params);
 	}
+	/**
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 */
+	@Override
+	public Integer forgetPwd(Sysuser user) {
+		String sql = "update sysuser set userpwd=? where phone=?";
+		Object[] params = {user.getUserPwd(),user.getPhone()};
+		return this.executeUpdate(sql, params);
+	}
+	/**
+	 * ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ï¢
+	 */
+	@Override
+	public Sysuser findUserInfo(Sysuser user) {
+		conn = this.getConnection();
+		String sql = "select username,userpwd from sysuser where phone=?";
+		try {
+			p = conn.prepareStatement(sql);
+			p.setString(1, user.getPhone());
+			rs = p.executeQuery();
+			while(rs.next()) {
+				user = new Sysuser();
+				user.setUserName(rs.getString("userName"));
+				user.setUserPwd(rs.getString("userPwd"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			this.closeAll(rs, conn, p);
+		}
+		
+		return user;
+	}
+
 
 }

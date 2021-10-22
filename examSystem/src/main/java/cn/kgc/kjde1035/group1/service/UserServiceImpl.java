@@ -78,6 +78,8 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public Sysuser stulogin(Sysuser user) {
+		String newPwd = MD5Utils.stringToMD5(user.getUserPwd());
+		user.setUserPwd(newPwd);
 		return userDao.stulogin(user);
 	}
 
@@ -93,17 +95,18 @@ public class UserServiceImpl implements UserService {
 	 * 总用户数
 	 */
 	@Override
-	public Integer getTotalCount(String usname,Integer roleId,String userTrueName) {
+	public Integer getTotalCount(String usname, Integer roleId, String userTrueName) {
 		// TODO Auto-generated method stub
-		return userDao.getTotalCount(usname,roleId,userTrueName);
+		return userDao.getTotalCount(usname, roleId, userTrueName);
 	}
 
 	/**
 	 * 获取用户列表
 	 */
 	@Override
-	public List<Sysuser> getAllUserLimit(String usname,Integer roleId,String userTrueName,Integer currentPageNo, Integer pageSize) {
-		return userDao.getUserByLimit(usname,roleId,userTrueName,currentPageNo, pageSize);
+	public List<Sysuser> getAllUserLimit(String usname, Integer roleId, String userTrueName, Integer currentPageNo,
+			Integer pageSize) {
+		return userDao.getUserByLimit(usname, roleId, userTrueName, currentPageNo, pageSize);
 	}
 
 	/**
@@ -121,16 +124,34 @@ public class UserServiceImpl implements UserService {
 	public Integer editpwd(Sysuser user) {
 		return userDao.editpwd(user);
 	}
-	
+
 	/**
 	 * 修改用户
 	 */
 	@Override
 	public Integer edit(Sysuser user) {
-		//加密
+		// 加密
 		String MD5Pwd = MD5Utils.stringToMD5(user.getUserPwd());
 		user.setUserPwd(MD5Pwd);
 		return userDao.edit(user);
+	}
+
+	/**
+	 * 根据手机号获取用户信息
+	 */
+	@Override
+	public Sysuser findUserInfo(Sysuser user) {
+		
+		return userDao.findUserInfo(user);
+	}
+	/**
+	 * 忘记密码
+	 */
+	@Override
+	public Integer forgetPwd(Sysuser user) {
+		String MD5Pwd = MD5Utils.stringToMD5(user.getUserPwd());
+		user.setUserPwd(MD5Pwd);
+		return userDao.forgetPwd(user);
 	}
 
 }

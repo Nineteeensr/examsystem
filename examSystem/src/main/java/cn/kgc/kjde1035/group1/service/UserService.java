@@ -39,17 +39,24 @@ public interface UserService {
 	public Integer add(Sysuser user);
 
 	// 获取用户列表
-	public List<Sysuser> getAllUserLimit(String usname,Integer roleId,String userTrueName,Integer currentPageNo, Integer pageSize);
+	public List<Sysuser> getAllUserLimit(String usname, Integer roleId, String userTrueName, Integer currentPageNo,
+			Integer pageSize);
 
 	// 获取总用户数
-	public Integer getTotalCount(String usname,Integer roleId,String userTrueName);
+	public Integer getTotalCount(String usname, Integer roleId, String userTrueName);
 
 	// 获取用户详细信息
 	public Sysuser detail(Sysuser user);
-	
+
 	// 修改用户密码
 	public Integer editpwd(Sysuser user);
-	
+
 	// 修改用户
 	public Integer edit(Sysuser user);
+	
+	//根据手机号获取用户信息
+	public Sysuser findUserInfo(Sysuser user);
+	
+	//忘记密码
+	public Integer forgetPwd(Sysuser user);
 }

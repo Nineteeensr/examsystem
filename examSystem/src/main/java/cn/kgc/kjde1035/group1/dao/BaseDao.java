@@ -1,6 +1,5 @@
 package cn.kgc.kjde1035.group1.dao;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,7 +19,7 @@ public class BaseDao {
 	// 数据库登录名
 	private String user = "root";
 	// 数据库密码
-	private String password = "123456";
+	private String password = "980213";
 
 	/**
 	 * 获取连接对象

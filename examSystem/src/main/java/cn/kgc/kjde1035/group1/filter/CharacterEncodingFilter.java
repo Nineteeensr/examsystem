@@ -39,20 +39,20 @@ public class CharacterEncodingFilter implements Filter {
 		// TODO Auto-generated method stub
 		String r = request.getCharacterEncoding();
 		String son = response.getCharacterEncoding();
-		if(r==null) {
+		if (r == null) {
 			request.setCharacterEncoding(bianma);
 		}
-		if(son==null) {
+		if (son == null) {
 			response.setCharacterEncoding(bianma);
 		}
-		response.setContentType("text/html;charset="+bianma);
+		response.setContentType("text/html;charset=" + bianma);
 		filterChain.doFilter(request, response);
 	}
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		// TODO Auto-generated method stub
-		 bianma = filterConfig.getInitParameter("encode");
+		bianma = filterConfig.getInitParameter("encode");
 	}
 
 }

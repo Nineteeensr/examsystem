@@ -1,55 +1,62 @@
 package cn.kgc.kjde1035.group1.entity;
 
-/**
- * 系统角色实体
- * @author Administrator
- *
- */
 public class Sysrole {
+	private int roleId;
+	private String roleName;
+	private int roleState;
+	private String roleDesc;
 
-	/**
-	 * 角色ID
-	 */
-	private Integer roleid;
-	/**
-	 * 角色名称
-	 */
-	private String rolename;
-	/**
-	 * 角色状�??
-	 */
-	private Integer rolestate;
-	/**
-	 * 角色说明
-	 */
-	private String roledesc;
-	
-	public Integer getRoleid() {
-		return roleid;
+	public int getRoleId() {
+		return roleId;
 	}
-	public void setRoleid(Integer roleid) {
-		this.roleid = roleid;
+
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
 	}
-	public String getRolename() {
-		return rolename;
+
+	public String getRoleName() {
+		return roleName;
 	}
-	public void setRolename(String rolename) {
-		this.rolename = rolename;
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
-	public Integer getRolestate() {
-		return rolestate;
+
+	public int getRoleState() {
+		return roleState;
 	}
-	public void setRolestate(Integer rolestate) {
-		this.rolestate = rolestate;
+
+	public void setRoleState(int roleState) {
+		this.roleState = roleState;
 	}
-	public String getRoledesc() {
-		return roledesc;
+
+	public String getRoleDesc() {
+		return roleDesc;
 	}
-	public void setRoledesc(String roledesc) {
-		this.roledesc = roledesc;
+
+	public void setRoleDesc(String roleDesc) {
+		this.roleDesc = roleDesc;
 	}
-	
-	
-	
-	
+
+	public Sysrole(int roleId, String roleName, int roleState, String roleDesc) {
+		super();
+		this.roleId = roleId;
+		this.roleName = roleName;
+		this.roleState = roleState;
+		this.roleDesc = roleDesc;
+	}
+
+	public Sysrole(String roleName, int roleState, String roleDesc) {
+		super();
+		this.roleName = roleName;
+		this.roleState = roleState;
+		this.roleDesc = roleDesc;
+	}
+
+	@Override
+	public String toString() {
+		return "Role [roleId=" + roleId + ", roleName=" + roleName + ", roleState=" + roleState + ", roleDesc="
+				+ roleDesc + "]";
+	}
+
 }

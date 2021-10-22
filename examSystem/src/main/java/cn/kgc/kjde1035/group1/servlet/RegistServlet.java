@@ -7,66 +7,72 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zhenzi.sms.ZhenziSmsClient;
+
 
 import cn.kgc.kjde1035.group1.entity.Sysuser;
 
 import cn.kgc.kjde1035.group1.service.UserService;
 import cn.kgc.kjde1035.group1.service.UserServiceImpl;
-import cn.kgc.kjde1035.group1.utils.PhonUtil;
 
 /**
  * Servlet implementation class RegistServlet
  */
 @WebServlet("/RegistServlet")
 public class RegistServlet extends HttpServlet {
-	
-	@Override
-	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		String cmd = request.getParameter("cmd");
-		if (cmd.equals("insert")) {
-			insert(request,response);
-		}
+	private static final long serialVersionUID = 1L;
+	String apiUrl = "https://sms_developer.zhenzikj.com";
+	String appId= "110214";
+	String appSecret = "f1821afe-a875-4c09-864d-3dbec9a4bad8";
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public RegistServlet() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
-	Sysuser user = new Sysuser();
-	public void insert(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-          String name= request.getParameter("userName");
-		  String password=request.getParameter("userPwd");
-		  String phone=request.getParameter("phone");
-		  
-		  if(name!=null&&password!=null&&phone!=null) {
-			  user=new Sysuser(name,password,Integer.parseInt(phone));
-			  String  str= PhonUtil.getphon(phone);
-			  ((HttpServletRequest) request).getSession().setAttribute("yz", str);
-			  insertyz(request, response);
-			  
-		  }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		this.doPost(request, response);
 	}
-	public void insertyz(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		String yzm=request.getParameter("yzm");
-		String str=(String)((HttpServletRequest) request).getSession().getAttribute("yz");
-		if(yzm.equals(str)) {
-			((HttpServletRequest) request).getSession().removeAttribute("yz");
-	         UserService us=new UserServiceImpl();
-	         Boolean result=us.regist(user);
-	         System.out.println(user);
-	         if(result) {
-	        	 request.getRequestDispatcher("login.jsp").forward(request, response);
-	         }else {
-	        	 request.setAttribute("mags", "Ìí¼ÓÊ§°Ü");
-				 request.getRequestDispatcher("regist.jsp").forward(request, response); 
-	         }
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		UserService userService = new UserServiceImpl();
+		PrintWriter out = response.getWriter();
+		String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
+		// ï¿½ï¿½È¡ï¿½Í»ï¿½ï¿½ï¿½ï¿½á½»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		String name = request.getParameter("userName");
+		String phone = request.getParameter("phone");
+		String password = request.getParameter("userPwd");
+		String trueName = request.getParameter("trueName");
+		
+		// ï¿½ï¿½ï¿½ï¿½ï¿½İ·ï¿½×°ï¿½ï¿½userï¿½ï¿½ï¿½ï¿½
+		Sysuser user = new Sysuser(name, password);
+		user.setPhone(phone);
+		user.setUsertruename(trueName);
+		
+		// 3.ï¿½ï¿½ï¿½ï¿½serviceï¿½ã·½ï¿½ï¿½
+		Boolean res = userService.regist(user);
+		if(res) {
+			request.getRequestDispatcher("login.jsp").forward(request, response);
 		}else {
-			request.setAttribute("mags", "ÊÖ»úÑéÖ¤Âë´íÎó");
-			 request.getRequestDispatcher("/regist.jsp").forward(request, response);
-			
+			request.setAttribute("mess", "æ³¨å†Œå¤±è´¥ï¼");
+			request.getRequestDispatcher("regist.jsp").forward(request, response);
 		}
 	}
+
 }

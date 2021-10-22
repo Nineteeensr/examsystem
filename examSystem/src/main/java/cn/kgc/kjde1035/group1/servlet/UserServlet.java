@@ -79,7 +79,7 @@ public class UserServlet extends HttpServlet {
 	 * @throws IllegalAccessException 
 	 * @throws UnsupportedEncodingException    
 	 * @Title: answer   
-	 * @Description: (Ìá½»»Ø´ğÎÊÌâ)   
+	 * @Description: (ï¿½á½»ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½)   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -108,7 +108,7 @@ public class UserServlet extends HttpServlet {
 	 * @throws IOException 
 	 * @throws ServletException    
 	 * @Title: stulogin   
-	 * @Description: (Ñ§ÉúµÇÂ¼)   
+	 * @Description: (Ñ§ï¿½ï¿½ï¿½ï¿½Â¼)   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -117,11 +117,17 @@ public class UserServlet extends HttpServlet {
 	 */
 	private void stulogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Sysuser user = new Sysuser();
-		user.setUserName(request.getParameter("username"));
-		user.setUserPwd(request.getParameter("userpwd"));
+		String code= (String)request.getSession().getAttribute("code");
+		if(!code.equals(request.getParameter("uCode"))) {
+			request.setAttribute("mess", "éªŒè¯ç é”™è¯¯");
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+			return;
+		}
+		user.setUserName(request.getParameter("userName"));
+		user.setUserPwd(request.getParameter("userPwd"));
 		user = userService.stulogin(user);
 		if(user==null) {
-			request.setAttribute("msg", "ÓÃ»§ÃûÃÜÂë´íÎó");
+			request.setAttribute("mess", "ç”¨æˆ·åæˆ–å¯†ç é”™è¯¯");
 			request.getRequestDispatcher("/login.jsp").forward(request, response);
 			return;
 		}else {
@@ -136,7 +142,7 @@ public class UserServlet extends HttpServlet {
 	 * @throws IOException 
 	 * @throws ServletException    
 	 * @Title: paper   
-	 * @Description: (Ñ§Éú»ñÈ¡ÊÔ¾íÄÚÈİ)   
+	 * @Description: (Ñ§ï¿½ï¿½ï¿½ï¿½È¡ï¿½Ô¾ï¿½ï¿½ï¿½ï¿½ï¿½)   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -162,7 +168,7 @@ public class UserServlet extends HttpServlet {
 	 * @throws InvocationTargetException 
 	 * @throws IllegalAccessException    
 	 * @Title: editpwd   
-	 * @Description: (ĞŞ¸ÄÓÃ»§ÃÜÂë¹¦ÄÜ)   
+	 * @Description: (ï¿½Ş¸ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ë¹¦ï¿½ï¿½)   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -179,7 +185,7 @@ public class UserServlet extends HttpServlet {
 			if (result>0) {
 				response.sendRedirect(Tools.Basepath(request, response)+"UserServlet?cmd=list");
 			}else {
-				request.setAttribute("msg", "±£´æÓÃ»§Ê§°Ü£¡");
+				request.setAttribute("msg", "ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ê§ï¿½Ü£ï¿½");
 				request.getRequestDispatcher("/sys/user/editpwd.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
@@ -192,7 +198,7 @@ public class UserServlet extends HttpServlet {
 	 * @throws IOException 
 	 * @throws ServletException    
 	 * @Title: toeditpwd   
-	 * @Description: (ÓÃ»§³õÊ¼»¯ÃÜÂëĞŞ¸Ä)   
+	 * @Description: ()   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -207,14 +213,14 @@ public class UserServlet extends HttpServlet {
 			request.setAttribute("user", user);
 			request.getRequestDispatcher("/sys/user/editpwd.jsp").forward(request, response);
 		}else {
-			request.setAttribute("msg", "ĞèÒªĞŞ¸ÄµÄÓÃ»§²»´æÔÚ¡£");
+			request.setAttribute("msg", "ï¿½ï¿½Òªï¿½Ş¸Äµï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¡ï¿½");
 			request.getRequestDispatcher("/error.jsp").forward(request, response);
 		}
 	}
 
 	/**   
 	 * @Title: edit   
-	 * @Description: (ĞŞ¸ÄÓÃ»§¹¦ÄÜ)   
+	 * @Description: (ï¿½Ş¸ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½)   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -231,12 +237,12 @@ public class UserServlet extends HttpServlet {
 			String userstate = request.getParameter("userstate");
 			String phone = request.getParameter("phone");
 			String roleid = request.getParameter("roleid");
-			user = new Sysuser(userPwd,usertruename, Integer.parseInt(userstate), Integer.parseInt(phone),Integer.parseInt(roleid));
+			user = new Sysuser(userPwd,usertruename, Integer.parseInt(userstate), phone,Integer.parseInt(roleid));
 			Integer result = userService.edit(user);
 			if(result>0){			
 				response.sendRedirect(Tools.Basepath(request, response)+"UserServlet?cmd=list");
 			}else{
-				request.setAttribute("msg", "±£´æÓÃ»§Ê§°Ü£¡");
+				request.setAttribute("msg", "ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ê§ï¿½Ü£ï¿½");
 				request.getRequestDispatcher("/sys/user/edit.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
@@ -248,7 +254,7 @@ public class UserServlet extends HttpServlet {
 	 * @throws IOException 
 	 * @throws ServletException    
 	 * @Title: toedit   
-	 * @Description: (ÓÃ»§³õÊ¼»¯ĞŞ¸ÄÒ³Ãæ)   
+	 * @Description: (ï¿½Ã»ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ş¸ï¿½Ò³ï¿½ï¿½)   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -263,14 +269,14 @@ public class UserServlet extends HttpServlet {
 			request.setAttribute("item",user);
 			request.getRequestDispatcher("/sys/user/edit.jsp").forward(request, response);
 		}else {
-			request.setAttribute("msg", "ĞèÒªĞŞ¸ÄµÄÓÃ»§²»´æÔÚ");
+			request.setAttribute("msg", "ï¿½ï¿½Òªï¿½Ş¸Äµï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 			request.getRequestDispatcher("/error.jsp").forward(request, response);
 		}
 	}
 
 	/**   
 	 * @Title: add   
-	 * @Description: (ĞÂÔöÓÃ»§)   
+	 * @Description: (ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½)   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -285,7 +291,7 @@ public class UserServlet extends HttpServlet {
 			if (result>0) {
 				response.sendRedirect(Tools.Basepath(request, response)+"UserServlet?cmd=lsit");
 			}else {
-				request.setAttribute("msg", "Ìí¼ÓÓÃ»§Ê§°ÜÇë²»ÒªÖØ¸´Ìí¼Ó");
+				request.setAttribute("msg", "ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ê§ï¿½ï¿½ï¿½ë²»Òªï¿½Ø¸ï¿½ï¿½ï¿½ï¿½");
 				request.getRequestDispatcher("/sys/user/add.jsp").forward(request, response);
 			}
 		} catch (IllegalAccessException e) {
@@ -308,7 +314,7 @@ public class UserServlet extends HttpServlet {
 	 * @throws IOException 
 	 * @throws ServletException    
 	 * @Title: list   
-	 * @Description: (»ñÈ¡ÓÃ»§ÁĞ±í)   
+	 * @Description: (ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½Ğ±ï¿½)   
 	 * @param: @param request
 	 * @param: @param response  
 	 * @return:	void
@@ -328,35 +334,35 @@ public class UserServlet extends HttpServlet {
 				Sysuser user = new Sysuser();
 				user.setUserName(usname); 
 				
-				// ´ÓÇ°¶Ë½ÓÊÕµ±Ç°Ò³Âë
+				// ï¿½ï¿½Ç°ï¿½Ë½ï¿½ï¿½Õµï¿½Ç°Ò³ï¿½ï¿½
 				String currNo = request.getParameter("currNo");
-				// ±£´æµ±Ç°Ò³Âë
+				// ï¿½ï¿½ï¿½æµ±Ç°Ò³ï¿½ï¿½
 				Integer currentPageNo = 0;
-				if (currNo == null) {// µÚÒ»´Î·ÃÎÊÒ³ÃæÊÇ ÏÔÊ¾ÎªµÚÒ»Ò³
+				if (currNo == null) {// ï¿½ï¿½Ò»ï¿½Î·ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ê¾Îªï¿½ï¿½Ò»Ò³
 					currentPageNo = 1;
 				} else {
 					currentPageNo = Integer.parseInt(currNo);
 				}
-				// ´ÓÊı¾İ¿âÖĞ»ñÈ¡×Ü¼ÇÂ¼Êı
+				// ï¿½ï¿½ï¿½ï¿½ï¿½İ¿ï¿½ï¿½Ğ»ï¿½È¡ï¿½Ü¼ï¿½Â¼ï¿½ï¿½
 				Integer totalCount = userService.getTotalCount(usname,rId,userTrueName);
-				// ¸øpagesµÄ×Ü¼ÇÂ¼Êı¸³Öµ
+				// ï¿½ï¿½pagesï¿½ï¿½ï¿½Ü¼ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Öµ
 				pages.setTotalCount(totalCount);
-				// »ñÈ¡×ÜÒ³Êı
+				// ï¿½ï¿½È¡ï¿½ï¿½Ò³ï¿½ï¿½
 				Integer totalPageCount = pages.getTotalPageCount();
-				// ¿ØÖÆµ±Ç°Ò³Âë
+				// ï¿½ï¿½ï¿½Æµï¿½Ç°Ò³ï¿½ï¿½
 				if (currentPageNo < 1) {
 					currentPageNo = 1;
 				}
 				if (currentPageNo > totalPageCount) {
 					currentPageNo = totalPageCount;
 				}
-				// ¸øpagesµÄµ±Ç°Ò³Âë¸³Öµ
+				// ï¿½ï¿½pagesï¿½Äµï¿½Ç°Ò³ï¿½ë¸³Öµ
 				pages.setCurrentPageNo(currentPageNo);
-				// »ñÈ¡µ±Ç°Ò³µÄÊı¾İ
+				// ï¿½ï¿½È¡ï¿½ï¿½Ç°Ò³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				userList = userService.getAllUserLimit(usname,rId,userTrueName,currentPageNo, pages.getPageSize());
-				// ¸øpagesÀàÖĞµÄlist¸³Öµ
+				// ï¿½ï¿½pagesï¿½ï¿½ï¿½Ğµï¿½listï¿½ï¿½Öµ
 				pages.setList(userList);
-				// ½«pages´æµ½request×÷ÓÃÓòÖĞ ½«Êı¾İ´Óservlet²ã´«µ½Ç°¶ËÏÔÊ¾
+				// ï¿½ï¿½pagesï¿½æµ½requestï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½İ´ï¿½servletï¿½ã´«ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ê¾
 				request.setAttribute("pages", pages);
 
 				request.getRequestDispatcher("/sys/user/list.jsp").forward(request, response);
@@ -369,7 +375,7 @@ public class UserServlet extends HttpServlet {
 	/**
 	 * @throws IOException    
 	 * @Title: logout   
-	 * @Description: (×¢ÏúÍË³öµÇÂ¼)   
+	 * @Description: (×¢ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½Â¼)   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -386,7 +392,7 @@ public class UserServlet extends HttpServlet {
 	 * @throws IOException 
 	 * @throws ServletException    
 	 * @Title: initpage   
-	 * @Description: (³õÊ¼»¯Ö÷Ò³)   
+	 * @Description: (ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ò³)   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -407,7 +413,7 @@ public class UserServlet extends HttpServlet {
 	 * @throws IOException 
 	 * @throws ServletException    
 	 * @Title: index   
-	 * @Description: (µÇÂ¼ºóÑ§Éú¶Ë½øÈëµÄindexÒ³Ãæ)   
+	 * @Description: (ï¿½ï¿½Â¼ï¿½ï¿½Ñ§ï¿½ï¿½ï¿½Ë½ï¿½ï¿½ï¿½ï¿½indexÒ³ï¿½ï¿½)   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -424,7 +430,7 @@ public class UserServlet extends HttpServlet {
 	 * @throws IOException 
 	 * @throws ServletException    
 	 * @Title: login   
-	 * @Description: (µÇÂ¼)   
+	 * @Description: (ï¿½ï¿½Â¼)   
 	 * @param: @param request
 	 * @param: @param response
 	 * @return:	void
@@ -432,14 +438,23 @@ public class UserServlet extends HttpServlet {
 	 *
 	 */
 	private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		Sysuser user = new Sysuser();
-		user.setUserName(request.getParameter("username"));
-		user.setUserPwd(request.getParameter("userpwd"));
+		user.setUserName(request.getParameter("userName"));
+		user.setUserPwd(request.getParameter("userPwd"));
+		String codeStr = (String)request.getSession().getAttribute("code");
+		String code = request.getParameter("uCode");
+		
+		if(!codeStr.equals(code.toUpperCase())) {
+			request.setAttribute("mess", "éªŒè¯ç é”™è¯¯");
+			System.err.println("éªŒè¯ç é”™è¯¯");
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+		}
+		
+		
 		Sysuser result = userService.login(user);
 		if (result==null) {
-			request.setAttribute("msg", "ÓÃ»§ÃûÃÜÂë´íÎó");
-			request.getRequestDispatcher("/login.jsp").forward(request, response);
+			request.setAttribute("mess", "ç”¨æˆ·åå’Œå¯†ç é”™è¯¯");
+			request.getRequestDispatcher("login.jsp").forward(request, response);
 			return;
 		}else {
 			HttpSession session = request.getSession(true);
