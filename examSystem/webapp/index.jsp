@@ -49,7 +49,7 @@
 					style="display: block">
 					<c:forEach items="${list}" var="child">
 						<c:if test="${child.funpid==top.funid}">
-							<li><a href="<%=basePath%>${child.funurl}" target="right" style="color:white"><span
+							<li><a href="<%=basePath%>${child.funurl}&userId=${uesr.userId}&roleId=${user.roleId}" target="right" style="color:white"><span
 									class="icon-caret-right"></span>${child.funname}</a></li>
 						</c:if>
 					</c:forEach>
@@ -71,13 +71,13 @@
 		});
 	</script>
 	<ul class="bread">
-		<li><a onclick="av()" href="av()" target="right"
+		<li><a  href="syshome.jsp" target="right"
 			class="icon-home"> 首页</a></li>
 		<li><a href="javascript:void(0);" target="right"
 			id="a_leader_txt">网站信息</a></li>
 	</ul>
 	<div class="admin">
-		<iframe scrolling="auto" rameborder="0" src="" name="right"
+		<iframe scrolling="auto" rameborder="0" src="syshome.jsp" name="right"
 			width="100%" height="100%"></iframe>
 	</div>
 </body>
