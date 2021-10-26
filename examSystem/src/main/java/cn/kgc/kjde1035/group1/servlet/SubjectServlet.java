@@ -1,8 +1,10 @@
 package cn.kgc.kjde1035.group1.servlet;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +16,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
 import com.alibaba.fastjson.JSON;
 
 import cn.kgc.kjde1035.group1.entity.Subject;
 import cn.kgc.kjde1035.group1.service.SubjectService;
 import cn.kgc.kjde1035.group1.service.SubjectServiceImpl;
+import cn.kgc.kjde1035.group1.utils.ExcelUtils;
 import cn.kgc.kjde1035.group1.utils.PageLimitUtil;
 
 /**
@@ -34,21 +43,23 @@ public class SubjectServlet extends HttpServlet {
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String cmd = request.getParameter("cmd");
-		if (cmd.equals("add")) {// Ôö¼Ó
+		if (cmd.equals("add")) {// ï¿½ï¿½ï¿½ï¿½
 			addSubject(request, response);
-		} else if (cmd.equals("del")) {// É¾³ý
+		} else if (cmd.equals("del")) {// É¾ï¿½ï¿½
 			delSubject(request, response);
-		} else if (cmd.equals("update")) {// ÐÞ¸Ä
+		} else if (cmd.equals("update")) {// ï¿½Þ¸ï¿½
 			updateSubject(request, response);
-		} else if (cmd.equals("doUpdate")) {// ×öÐÞ¸Ä
+		} else if (cmd.equals("doUpdate")) {// ï¿½ï¿½ï¿½Þ¸ï¿½
 			doUpdateSubject(request, response);
-		} else if (cmd.equals("limit")) { // ·ÖÒ³²éÑ¯
+		} else if (cmd.equals("limit")) { // ï¿½ï¿½Ò³ï¿½ï¿½Ñ¯
 			limit(request, response);
+		} else if ("addbyExcel".equals(cmd)) {
+			addbyExcel(request,response);
 		}
 
 	}
 
-	// Ôö¼Ó
+	// ï¿½ï¿½ï¿½ï¿½
 	private void addSubject(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -66,12 +77,12 @@ public class SubjectServlet extends HttpServlet {
 			request.getRequestDispatcher("SubjectServlet?cmd=limit").forward(request, response);
 		} else {
 			System.out.println("1111");
-			request.setAttribute("mess", "Ôö¼ÓÊ§°ÜÇë¼ì²éÊÇ·ñ´æÔÚ´ËÌâ");
+			request.setAttribute("mess", "ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½");
 			out.print("<script type='text'/javascript>history.back();<script>");
 		}
 	}
 
-	// É¾³ý
+	// É¾ï¿½ï¿½
 	private void delSubject(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
@@ -84,13 +95,13 @@ public class SubjectServlet extends HttpServlet {
 			out.print(json);
 			request.getRequestDispatcher("SubjectServlet?cmd=limit").forward(request, response);
 		} else {
-			out.print("<script type='text/javascript'>alert('É¾³ýÊ§°Ü');</script>");
-			request.setAttribute("mess", "É¾³ýÊ§°Ü");
+			out.print("<script type='text/javascript'>alert('É¾ï¿½ï¿½Ê§ï¿½ï¿½');</script>");
+			request.setAttribute("mess", "É¾ï¿½ï¿½Ê§ï¿½ï¿½");
 		}
 
 	}
 
-	// ÐÞ¸Ä
+	// ï¿½Þ¸ï¿½
 	private void updateSubject(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String sid = request.getParameter("sid");
@@ -99,7 +110,7 @@ public class SubjectServlet extends HttpServlet {
 		request.getRequestDispatcher("sys/subject/edit.jsp").forward(request, response);
 	}
 
-	// ×öÐÞ¸Ä
+	// ï¿½ï¿½ï¿½Þ¸ï¿½
 	private void doUpdateSubject(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
@@ -116,12 +127,12 @@ public class SubjectServlet extends HttpServlet {
 		if (result > 0) {
 			request.getRequestDispatcher("SubjectServlet?cmd=limit").forward(request, response);
 		} else {
-			out.print("<script type='text/javascript'>alert('ÐÞ¸ÄÊ§°Ü');</script>");
+			out.print("<script type='text/javascript'>alert('ï¿½Þ¸ï¿½Ê§ï¿½ï¿½');</script>");
 			request.getRequestDispatcher("SubjectServlet?cmd=limit").forward(request, response);
 		}
 	}
 
-	// ·ÖÒ³²éÑ¯
+	// ï¿½ï¿½Ò³ï¿½ï¿½Ñ¯
 	private void limit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PageLimitUtil<Subject> pager = new PageLimitUtil<Subject>();
 		String currNo = request.getParameter("currNo");
@@ -150,4 +161,33 @@ public class SubjectServlet extends HttpServlet {
 		request.setAttribute("pager", pager);
 		request.getRequestDispatcher("sys/subject/list.jsp").forward(request, response);
 	}
+	
+	private void addbyExcel(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		if(ServletFileUpload.isMultipartContent(request)) {
+			DiskFileItemFactory itemFactory = new DiskFileItemFactory();
+			ServletFileUpload upload = new ServletFileUpload(itemFactory);
+			try {
+				List<FileItem> itemList = upload.parseRequest(request);
+				Iterator<FileItem> it = itemList.iterator();
+				while(it.hasNext()) {
+					FileItem item = it.next();
+					if(!item.isFormField()) {
+						InputStream is = item.getInputStream();
+						String name = item.getName();
+						String filetype = name.substring(name.lastIndexOf("."));
+						List<Subject> subList = ExcelUtils.parseSubject(filetype, is);
+						Integer result = subjectService.addSubjects(subList);  
+						
+					}
+				}
+			} catch (FileUploadException|IOException e) {
+				e.printStackTrace();
+			}
+			request.getRequestDispatcher("sys/subject/add.jsp").forward(request, response);
+			
+		}
+	}
+	
+	
 }

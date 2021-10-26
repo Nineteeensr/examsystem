@@ -31,7 +31,7 @@ public class PaperDaoImpl extends BaseDao implements PaperDao {
 	ResultSet rs = null;
 
 	/**
-	 * Ñ§Éúµã»÷ÊÔ¾í»ñÈ¡ÊÔÌâ
+	 * Ñ§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¾ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½
 	 */
 	@Override
 	public List<Subject> subjectList(Paper paper) {
@@ -63,18 +63,19 @@ public class PaperDaoImpl extends BaseDao implements PaperDao {
 	}
 
 	/**
-	 * Ñ§ÉúµÇÂ¼½øÈëindexÏÔÊ¾È«²¿ÊÔÌâ
+	 * Ñ§ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½indexï¿½ï¿½Ê¾È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	@Override
-	public List<Paper> list(Paper paper) {
+	public List<Paper> list(Integer userId) {
 		List<Paper> list = new ArrayList<Paper>();
 		conn = this.getConnection();
-		String sql = "SELECT pname,count(*) scount FROM paper GROUP BY pname";
+		String sql = "SELECT pname,COUNT(*) scount FROM paper WHERE pname NOT IN(SELECT pname FROM studentpaper WHERE userid = ?)GROUP BY pname ;";
 		try {
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, userId);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				paper = new Paper();
+				Paper paper = new Paper();
 				paper.setPname(rs.getString("pname"));
 				paper.setScount(rs.getInt("scount"));
 				list.add(paper);
@@ -88,7 +89,7 @@ public class PaperDaoImpl extends BaseDao implements PaperDao {
 		return list;
 	}
 
-	// Éú³ÉÊÔ¾í
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ô¾ï¿½
 	@Override
 	public Integer addPaper(Paper paper) {
 		String sql = "INSERT INTO paper(pname,sid) SELECT ?,sid FROM subject where sstate = 1 ORDER BY rand() LIMIT ?";
@@ -96,7 +97,7 @@ public class PaperDaoImpl extends BaseDao implements PaperDao {
 		return this.executeUpdate(sql, params);
 	}
 
-	// ²é¿´ÊÔÌâÄÚÈÝ
+	// ï¿½é¿´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	@Override
 	public List<Subject> getSubjectListByPname(String pname) {
 		List<Subject> subjectlist = new ArrayList<Subject>();
@@ -119,7 +120,7 @@ public class PaperDaoImpl extends BaseDao implements PaperDao {
 		return subjectlist;
 	}
 
-//		// ÏÔÊ¾È«²¿ÊÔ¾í
+//		// ï¿½ï¿½Ê¾È«ï¿½ï¿½ï¿½Ô¾ï¿½
 //		@Override
 //		public List<Paper> getPaperListByPname(String pname) {
 //			List<Paper> paperList = new ArrayList<Paper>();
@@ -140,7 +141,7 @@ public class PaperDaoImpl extends BaseDao implements PaperDao {
 //			return paperList;
 //		}
 
-	// É¾³ýÊÔ¾í
+	// É¾ï¿½ï¿½ï¿½Ô¾ï¿½
 	@Override
 	public Integer delect(String pname) {
 		String sql = "delete from paper where pname=?";
@@ -149,7 +150,7 @@ public class PaperDaoImpl extends BaseDao implements PaperDao {
 	}
 
 	/**
-	 * »ñÈ¡×ÜÊÔ¾íÊý
+	 * ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ô¾ï¿½ï¿½ï¿½
 	 */
 	@Override
 	public Integer getTotalCount(String pname) {
@@ -174,7 +175,7 @@ public class PaperDaoImpl extends BaseDao implements PaperDao {
 		return result;
 	}
 
-	// ·ÖÒ³²éÑ¯È«²¿ÊÔ¾í
+	// ï¿½ï¿½Ò³ï¿½ï¿½Ñ¯È«ï¿½ï¿½ï¿½Ô¾ï¿½
 	@Override
 	public List<Paper> getPaperListByLimit(String pname, int currentPageNo, int pageSize) {
 		List<Paper> paperList = new ArrayList<Paper>();

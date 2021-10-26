@@ -6,25 +6,28 @@ import cn.kgc.kjde1035.group1.entity.Subject;
 
 public interface SubjectService {
 
-	// Ôö¼ÓÒ»¸öÊÔÌâ
+	// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public Integer addSubject(Subject subject);
 
-	// ·ÖÒ³²éÑ¯
+	// ï¿½ï¿½Ò³ï¿½ï¿½Ñ¯
 	public List<Subject> getAllSubjectByLimit(String scontent, Integer currentPageNo, Integer pageSize);
 
-	// ĞŞ¸ÄÊÔÌâ
+	// ï¿½Ş¸ï¿½ï¿½ï¿½ï¿½ï¿½
 	public Integer updateSubject(Subject subject);
 
-	// ²éÑ¯Ò»¸öÊÔÌâÏêÇé(id)
+	// ï¿½ï¿½Ñ¯Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(id)
 	public Subject getSubjectBySid(Integer sid);
 
-	// É¾³ıÊÔÌâ
+	// É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public Integer delSubject(Integer sid);
 
-	//// ×Ü¼ÇÂ¼Êı
+	//// ï¿½Ü¼ï¿½Â¼ï¿½ï¿½
 	// public Integer totalCount();
-	// Ä£ºı²éÑ¯
+	// Ä£ï¿½ï¿½ï¿½ï¿½Ñ¯
 
-	// Ä£ºı²éÑ¯µÄ×Ü¼ÇÂ¼Êı
+	// Ä£ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½Ü¼ï¿½Â¼ï¿½ï¿½
 	public Integer getTotalCount(String scontent);
+	
+	
+	public Integer addSubjects(List<Subject> subList);
 }

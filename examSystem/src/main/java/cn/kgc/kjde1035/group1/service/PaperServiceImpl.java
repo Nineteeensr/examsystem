@@ -26,7 +26,7 @@ public class PaperServiceImpl implements PaperService {
 	PaperDao pd = new PaperDaoImpl();
 
 	/**
-	 * Ñ§Éúµã»÷ÊÔ¾í»ñÈ¡ÊÔ¾íÄÚµÄÌâÄ¿
+	 * Ñ§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¾ï¿½ï¿½È¡ï¿½Ô¾ï¿½ï¿½Úµï¿½ï¿½ï¿½Ä¿
 	 */
 	@Override
 	public List<Subject> subjectList(Paper paper) {
@@ -34,44 +34,44 @@ public class PaperServiceImpl implements PaperService {
 	}
 
 	@Override
-	public List<Paper> list(Paper paper) {
-		return pd.list(paper);
+	public List<Paper> list(Integer userId) {
+		return pd.list(userId);
 	}
 
-	// Éú³ÉÊÔ¾í
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ô¾ï¿½
 	@Override
 	public Integer addPaper(Paper paper) {
 		// TODO Auto-generated method stub
 		return pd.addPaper(paper);
 	}
 
-	// ²éÑ¯È«²¿ÊÔ¾í
+	// ï¿½ï¿½Ñ¯È«ï¿½ï¿½ï¿½Ô¾ï¿½
 	@Override
 	public List<Paper> findPaperListByLimit(String pname, int currentPageNo, int pageSize) {
 		// TODO Auto-generated method stub
 		return pd.getPaperListByLimit(pname, currentPageNo, pageSize);
 	}
 
-	// ²é¿´ÊÔÌâÄÚÈİ
+	// ï¿½é¿´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	@Override
 	public List<Subject> getSubjectListByPname(String pname) {
 		// TODO Auto-generated method stub
 		return pd.getSubjectListByPname(pname);
 	}
 
-//		// ÏÔÊ¾È«²¿ÊÔ¾í
+//		// ï¿½ï¿½Ê¾È«ï¿½ï¿½ï¿½Ô¾ï¿½
 //		@Override
 //		public List<Paper> getPaperListByPname(String pname) {
 //			// TODO Auto-generated method stub
 //			return pd.getPaperListByPname(pname);
 //		}
 
-	// ÏÔÊ¾ÊÔ¾íÊıÁ¿
+	// ï¿½ï¿½Ê¾ï¿½Ô¾ï¿½ï¿½ï¿½ï¿½ï¿½
 	public Integer getTotalCount(String pname) {
 		return pd.getTotalCount(pname);
 	}
 
-	// É¾³ıÊÔ¾í
+	// É¾ï¿½ï¿½ï¿½Ô¾ï¿½
 	public boolean removePaperByPname(String pname) {
 		Integer result = pd.delect(pname);
 		if (result > 0) {

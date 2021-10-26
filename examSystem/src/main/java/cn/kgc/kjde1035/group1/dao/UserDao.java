@@ -61,4 +61,5 @@ public interface UserDao {
 	// ��������
 	public Integer forgetPwd(Sysuser user);
 	
+	public List<Sysuser> getClazzInfo();
 }

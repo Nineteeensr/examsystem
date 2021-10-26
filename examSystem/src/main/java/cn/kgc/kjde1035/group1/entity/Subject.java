@@ -15,6 +15,15 @@ public class Subject {
 	private String skey;
 	private Integer sstate;
 	private String studentkey;
+	private Integer speciaid;
+
+	public Integer getSpeciaid() {
+		return speciaid;
+	}
+
+	public void setSpeciaid(Integer speciaid) {
+		this.speciaid = speciaid;
+	}
 
 	public Integer getSid() {
 		return sid;

@@ -30,24 +30,24 @@ public class UserServiceImpl implements UserService {
 	UserDao userDao = new UserDaoImpl();
 
 	/**
-	 * ×¢²á
+	 * ×¢ï¿½ï¿½
 	 */
 	@Override
 	public Boolean regist(Sysuser user) {
-		// ¼ÓÃÜ
+		// ï¿½ï¿½ï¿½ï¿½
 		String newPwd = MD5Utils.stringToMD5(user.getUserPwd());
 		user.setUserPwd(newPwd);
 		Integer result = userDao.userRegist(user);
-		if (result > 0) {// ×¢²á³É¹¦
+		if (result > 0) {// ×¢ï¿½ï¿½É¹ï¿½
 			return true;
-		} else {// ×¢²áÊ§°Ü
+		} else {// ×¢ï¿½ï¿½Ê§ï¿½ï¿½
 			return false;
 		}
 
 	}
 
 	/**
-	 * µÇÂ¼
+	 * ï¿½ï¿½Â¼
 	 */
 	@Override
 	public Sysuser login(Sysuser user) {
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * ³õÊ¼»¯ÓÃ»§ÁÐ±í
+	 * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ð±ï¿½
 	 */
 	@Override
 	public List<SysFunction> initpage(Sysuser user) {
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * Ñ§ÉúµÇÂ¼
+	 * Ñ§ï¿½ï¿½ï¿½ï¿½Â¼
 	 */
 	@Override
 	public Sysuser stulogin(Sysuser user) {
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * ÏµÍ³ÐÂÔöÓÃ»§
+	 * ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½
 	 */
 	@Override
 	public Integer add(Sysuser user) {
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * ×ÜÓÃ»§Êý
+	 * ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½
 	 */
 	@Override
 	public Integer getTotalCount(String usname, Integer roleId, String userTrueName) {
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * »ñÈ¡ÓÃ»§ÁÐ±í
+	 * ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½Ð±ï¿½
 	 */
 	@Override
 	public List<Sysuser> getAllUserLimit(String usname, Integer roleId, String userTrueName, Integer currentPageNo,
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * »ñÈ¡ÓÃ»§ÏêÏ¸ÐÅÏ¢
+	 * ï¿½ï¿½È¡ï¿½Ã»ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½Ï¢
 	 */
 	@Override
 	public Sysuser detail(Sysuser user) {
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * ¹ÜÀíÔ±ÐÞ¸ÄÓÃ»§ÃÜÂë
+	 * ï¿½ï¿½ï¿½ï¿½Ô±ï¿½Þ¸ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	@Override
 	public Integer editpwd(Sysuser user) {
@@ -126,18 +126,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * ÐÞ¸ÄÓÃ»§
+	 * ï¿½Þ¸ï¿½ï¿½Ã»ï¿½
 	 */
 	@Override
 	public Integer edit(Sysuser user) {
-		// ¼ÓÃÜ
+		// ï¿½ï¿½ï¿½ï¿½
 		String MD5Pwd = MD5Utils.stringToMD5(user.getUserPwd());
 		user.setUserPwd(MD5Pwd);
 		return userDao.edit(user);
 	}
 
 	/**
-	 * ¸ù¾ÝÊÖ»úºÅ»ñÈ¡ÓÃ»§ÐÅÏ¢
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Å»ï¿½È¡ï¿½Ã»ï¿½ï¿½ï¿½Ï¢
 	 */
 	@Override
 	public Sysuser findUserInfo(Sysuser user) {
@@ -145,13 +145,19 @@ public class UserServiceImpl implements UserService {
 		return userDao.findUserInfo(user);
 	}
 	/**
-	 * Íü¼ÇÃÜÂë
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	@Override
 	public Integer forgetPwd(Sysuser user) {
 		String MD5Pwd = MD5Utils.stringToMD5(user.getUserPwd());
 		user.setUserPwd(MD5Pwd);
 		return userDao.forgetPwd(user);
+	}
+
+	@Override
+	public List<Sysuser> getClazzInfo() {
+		// TODO Auto-generated method stub
+		return userDao.getClazzInfo();
 	}
 
 }

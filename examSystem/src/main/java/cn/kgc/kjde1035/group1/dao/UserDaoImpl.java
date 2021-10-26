@@ -135,7 +135,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	@Override
 	public Sysuser stulogin(Sysuser user) {
 		conn = this.getConnection();
-		String sql = "SELECT USERID,A.ROLEID,USERNAME,USERPWD,USERTRUENAME,USERSTATE, " + "B.ROLENAME FROM SYSUSER A "
+		String sql = "SELECT USERID,A.ROLEID,USERNAME,clazzid,USERPWD,USERTRUENAME,USERSTATE, " + "B.ROLENAME FROM SYSUSER A "
 				+ "INNER JOIN SYSROLE B ON A.ROLEID=B.ROLEID " + "WHERE USERSTATE=1 AND USERNAME=? AND USERPWD=? ";
 		try {
 			p = conn.prepareStatement(sql);
@@ -151,6 +151,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 				user.setUsertruename(rs.getString("usertruename"));
 				user.setUserState(rs.getInt("userState"));
 				user.setRolename(rs.getString("rolename"));
+				user.setClazzId(rs.getInt("clazzid"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -261,7 +262,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	@Override
 	public Sysuser detail(Sysuser user) {
 		conn = this.getConnection();
-		String sql = "SELECT A.userid,A.roleid,A.username,A.userpwd,A.usertruename,A.userstate,B.rolename,A.phone FROM sysuser A INNER JOIN sysrole B ON A.roleid=B.roleid WHERE USERID=?";
+		String sql = "SELECT A.userid,A.roleid,A.username,A.userpwd,A.usertruename,A.userstate,B.rolename,A.phone,A.clazzid,C.clazzName FROM sysuser A INNER JOIN sysrole B ON A.roleid=B.roleid INNER JOIN clazz C ON A.clazzid=C.clazzid WHERE USERID=?";
 		try {
 			p = conn.prepareStatement(sql);
 			p.setInt(1, user.getUserId());
@@ -276,6 +277,8 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 				user.setUserState(rs.getInt("userState"));
 				user.setRolename(rs.getString("rolename"));
 				user.setPhone(rs.getString("phone"));
+				user.setClazzId(rs.getInt("clazzid"));
+				user.setClazzName(rs.getString("clazzName"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -301,13 +304,10 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	 */
 	@Override
 	public Integer edit(Sysuser user) {
-		String sql = "UPDATE SYSUSER SET ROLEID=?,USERPWD=?,USERTRUENAME=?,USERSTATE=?,PHONE=? WHERE USERTRUENAME=?";
+		String sql = "UPDATE SYSUSER SET ROLEID=?,USERPWD=?,USERTRUENAME=?,USERSTATE=?,PHONE=?,CLAZZID=? WHERE USERTRUENAME=?";
 
 		Object[] params = { user.getRoleId(), user.getUserPwd(), user.getUsertruename(), user.getUserState(),
-				user.getPhone(), user.getUsertruename() };
-		for (Object object : params) {
-			System.out.println(object);
-		}
+				user.getPhone(), user.getClazzId(),user.getUsertruename() };
 		return this.executeUpdate(sql, params);
 	}
 	/**
@@ -343,6 +343,32 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 		}
 		
 		return user;
+	}
+
+	@Override
+	public List<Sysuser> getClazzInfo() {
+		Sysuser user = new Sysuser();
+		List<Sysuser> list = new ArrayList<Sysuser>();
+		conn = this.getConnection();
+		String sql = "select clazzId,clazzName from clazz";
+		try {
+			p = conn.prepareStatement(sql);
+
+			rs = p.executeQuery();
+			while(rs.next()) {
+				user = new Sysuser();
+				user.setClazzId(rs.getInt("clazzId"));
+				user.setClazzName(rs.getString("clazzName"));
+				list.add(user);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			this.closeAll(rs, conn, p);
+		}
+		
+		return list;
 	}
 
 

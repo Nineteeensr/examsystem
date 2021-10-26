@@ -70,6 +70,8 @@ public class UserServlet extends HttpServlet {
 			stulogin(request,response);
 		}else if(cmd.equals("answer")){
 			answer(request,response);
+		}else if(cmd.equals("stuIndex")) {
+			index(request,response);
 		}
 	}
 	
@@ -118,7 +120,7 @@ public class UserServlet extends HttpServlet {
 	private void stulogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Sysuser user = new Sysuser();
 		String code= (String)request.getSession().getAttribute("code");
-		if(!code.equals(request.getParameter("uCode"))) {
+		if(!code.equals(request.getParameter("uCode").toUpperCase())) {
 			request.setAttribute("mess", "验证码错误");
 			request.getRequestDispatcher("login.jsp").forward(request, response);
 			return;
@@ -134,7 +136,8 @@ public class UserServlet extends HttpServlet {
 			HttpSession session = request.getSession(true);
 			session.setAttribute("user", user);
 			session.setAttribute("userid", user.getUserId());
-			index(request,response);
+//			index(request,response);
+			request.getRequestDispatcher("UserServlet?cmd=stuIndex&userid="+user.getUserId()).forward(request, response);
 		}
 	}
 
@@ -237,12 +240,14 @@ public class UserServlet extends HttpServlet {
 			String userstate = request.getParameter("userstate");
 			String phone = request.getParameter("phone");
 			String roleid = request.getParameter("roleid");
-			user = new Sysuser(userPwd,usertruename, Integer.parseInt(userstate), phone,Integer.parseInt(roleid));
+			String clazzId = request.getParameter("project_id");
+			
+			user = new Sysuser(userPwd,usertruename, Integer.parseInt(userstate), phone,Integer.parseInt(roleid),Integer.parseInt(clazzId));
 			Integer result = userService.edit(user);
 			if(result>0){			
 				response.sendRedirect(Tools.Basepath(request, response)+"UserServlet?cmd=list");
 			}else{
-				request.setAttribute("msg", "�����û�ʧ�ܣ�");
+				request.setAttribute("msg", "保存用户失败！");
 				request.getRequestDispatcher("/sys/user/edit.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
@@ -265,11 +270,13 @@ public class UserServlet extends HttpServlet {
 		Sysuser user = new Sysuser();
 		user.setUserId(Integer.parseInt(request.getParameter("id")));
 		user = userService.detail(user);
+		List<Sysuser> list = userService.getClazzInfo();
 		if (user!=null) {
 			request.setAttribute("item",user);
+			request.setAttribute("clazz",list);
 			request.getRequestDispatcher("/sys/user/edit.jsp").forward(request, response);
 		}else {
-			request.setAttribute("msg", "��Ҫ�޸ĵ��û�������");
+			request.setAttribute("msg", "需要修改的用户不存在");
 			request.getRequestDispatcher("/error.jsp").forward(request, response);
 		}
 	}
@@ -422,7 +429,9 @@ public class UserServlet extends HttpServlet {
 	 */
 	private void index(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Paper paper = new Paper();
-		List<Paper> papers = paperService.list(paper);
+		Integer userid = Integer.parseInt(request.getParameter("userid"));
+		System.out.println(userid);
+		List<Paper> papers = paperService.list(userid);
 		request.setAttribute("papers", papers);
 		request.getRequestDispatcher("/user/index.jsp").forward(request, response);
 	}

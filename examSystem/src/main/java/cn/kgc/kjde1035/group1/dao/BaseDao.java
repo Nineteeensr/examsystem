@@ -15,11 +15,11 @@ import java.sql.SQLException;
  */
 public class BaseDao {
 	private String driver = "com.mysql.jdbc.Driver";
-	private String url = "jdbc:mysql://localhost:3306/exam";
+	private String url = "jdbc:mysql://localhost:3306/examdbtest";
 	// 数据库登录名
 	private String user = "root";
 	// 数据库密码
-	private String password = "980213";
+	private String password = "123456";
 
 	/**
 	 * 获取连接对象

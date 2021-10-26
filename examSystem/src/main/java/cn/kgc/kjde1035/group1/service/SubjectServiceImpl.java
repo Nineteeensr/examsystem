@@ -9,14 +9,14 @@ import cn.kgc.kjde1035.group1.entity.Subject;
 public class SubjectServiceImpl implements SubjectService {
 	SubjectDao subjectDao = new SubjectDaoImpl();
 
-	// ·ÖÒ³²éËùÓĞÊÔÌâ
+	// ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	@Override
 	public List<Subject> getAllSubjectByLimit(String scontent, Integer currentPageNo, Integer pageSize) {
 
 		return subjectDao.getAllSubjectByLimit(scontent, currentPageNo, pageSize);
 	}
 
-	// ²é×Ü¼ÇÂ¼Êı
+	// ï¿½ï¿½ï¿½Ü¼ï¿½Â¼ï¿½ï¿½
 	@Override
 	public Integer getTotalCount(String scontent) {
 		// TODO Auto-generated method stub
@@ -24,32 +24,44 @@ public class SubjectServiceImpl implements SubjectService {
 		return subjectDao.getTotalCount(scontent);
 	}
 
-	// Ôö¼ÓÒ»¸öÊÔÌâ
+	// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	@Override
 	public Integer addSubject(Subject subject) {
 		// TODO Auto-generated method stub
 		return subjectDao.addSubject(subject);
 	}
+	
+	
+	
 
-	// ĞŞ¸ÄÊÔÌâ
+	// ï¿½Ş¸ï¿½ï¿½ï¿½ï¿½ï¿½
 	@Override
 	public Integer updateSubject(Subject subject) {
 		// TODO Auto-generated method stub
 		return subjectDao.updateSubject(subject);
 	}
 
-	// ²éÑ¯Ò»¸öÊÔÌâÏêÇé(id)
+	// ï¿½ï¿½Ñ¯Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(id)
 	@Override
 	public Subject getSubjectBySid(Integer sid) {
 		// TODO Auto-generated method stub
 		return subjectDao.getSubjectBySid(sid);
 	}
 
-	// É¾³ıÊÔÌâ
+	// É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	@Override
 	public Integer delSubject(Integer sid) {
 		// TODO Auto-generated method stub
 		return subjectDao.delSubject(sid);
+	}
+
+	@Override
+	public Integer addSubjects(List<Subject> subList) {
+		int result = 0;
+		for (Subject subject : subList) {
+			result += this.addSubject(subject);
+		}
+		return result;
 	}
 
 }

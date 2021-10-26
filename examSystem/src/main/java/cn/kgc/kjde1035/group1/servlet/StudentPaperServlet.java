@@ -16,9 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.bag.SynchronizedSortedBag;
 
+import cn.kgc.kjde1035.group1.entity.Score;
 import cn.kgc.kjde1035.group1.entity.Studentpaper;
 import cn.kgc.kjde1035.group1.entity.Subject;
 import cn.kgc.kjde1035.group1.entity.Sysuser;
+import cn.kgc.kjde1035.group1.service.ScoreService;
+import cn.kgc.kjde1035.group1.service.ScoreServiceImpl;
 import cn.kgc.kjde1035.group1.service.StudentPaperService;
 import cn.kgc.kjde1035.group1.service.StudentPaperServiceImpl;
 import cn.kgc.kjde1035.group1.utils.PageLimitUtil;
@@ -55,8 +58,14 @@ public class StudentPaperServlet extends HttpServlet {
 		List<Subject> subList = service.findAllErr(spid, pname, Integer.parseInt(userid), 0, 0);
 		System.out.println("得分时的"+spid);
 		Integer count = service.rightTotalCountInPaper(spid, pname, Integer.parseInt(userid));
+		Score score = new Score();
+		score.setTotalScore(count*10);
+		score.setPname(pname);
+		score.setUserId(Integer.parseInt(userid));
+		ScoreService scoreServiec = new ScoreServiceImpl();
+		Boolean result = scoreServiec.appendScore(score);
 		request.setAttribute("score", count);
-		response.getWriter().print("您本次得分" + count * 2 + "!");
+		response.getWriter().print("您本次得分" + count * 10 + "!");
 
 	}
 
@@ -152,7 +161,6 @@ public class StudentPaperServlet extends HttpServlet {
 		pages.getMaxPageNo();
 		request.setAttribute("pages", pages);
 		request.getRequestDispatcher("user/paper/studentpaper.jsp").forward(request, response);
-
 	}
 
 }

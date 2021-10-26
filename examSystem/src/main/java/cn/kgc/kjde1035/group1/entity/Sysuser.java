@@ -12,12 +12,29 @@ public class Sysuser {
 	 * 注意写注�?
 	 */
 	private Integer userId;
+	public Integer getClazzId() {
+		return clazzId;
+	}
+
+	public void setClazzId(Integer clazzId) {
+		this.clazzId = clazzId;
+	}
+
 	private Integer roleId;
 	private String userName;
 	private String usertruename;
 	private String userPwd;
 	private Integer userState;
-	
+	private Integer clazzId;
+	private String clazzName;
+
+	public String getClazzName() {
+		return clazzName;
+	}
+
+	public void setClazzName(String clazzName) {
+		this.clazzName = clazzName;
+	}
 
 	private String rolename;
 	private String phone;
@@ -125,5 +142,13 @@ public class Sysuser {
 		this.phone = phone;
 		this.roleId = roleId;
 	}
-	
+	public Sysuser(String userPwd, String usertruename, Integer userState, String phone, Integer roleId,Integer clazzId) {
+		super();
+		this.userPwd = userPwd;
+		this.usertruename = usertruename;
+		this.userState = userState;
+		this.phone = phone;
+		this.roleId = roleId;
+		this.clazzId=clazzId;
+	}
 }

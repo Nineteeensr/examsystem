@@ -23,40 +23,43 @@ import cn.kgc.kjde1035.group1.utils.PageLimitUtil;
  *
  */
 public interface UserService {
-	// 注册
+	// 注锟斤拷
 	public Boolean regist(Sysuser user);
 
-	// 登录
+	// 锟斤拷录
 	public Sysuser login(Sysuser user);
 
-	// 初始化用户列表
+	// 锟斤拷始锟斤拷锟矫伙拷锟叫憋拷
 	public List<SysFunction> initpage(Sysuser user);
 
-	// 学生登录
+	// 学锟斤拷锟斤拷录
 	public Sysuser stulogin(Sysuser user);
 
-	// 系统新增用户
+	// 系统锟斤拷锟斤拷锟矫伙拷
 	public Integer add(Sysuser user);
 
-	// 获取用户列表
+	// 锟斤拷取锟矫伙拷锟叫憋拷
 	public List<Sysuser> getAllUserLimit(String usname, Integer roleId, String userTrueName, Integer currentPageNo,
 			Integer pageSize);
 
-	// 获取总用户数
+	// 锟斤拷取锟斤拷锟矫伙拷锟斤拷
 	public Integer getTotalCount(String usname, Integer roleId, String userTrueName);
 
-	// 获取用户详细信息
+	// 锟斤拷取锟矫伙拷锟斤拷细锟斤拷息
 	public Sysuser detail(Sysuser user);
 
-	// 修改用户密码
+	// 锟睫革拷锟矫伙拷锟斤拷锟斤拷
 	public Integer editpwd(Sysuser user);
 
-	// 修改用户
+	// 锟睫革拷锟矫伙拷
 	public Integer edit(Sysuser user);
 	
-	//根据手机号获取用户信息
+	//锟斤拷锟斤拷锟街伙拷锟脚伙拷取锟矫伙拷锟斤拷息
 	public Sysuser findUserInfo(Sysuser user);
 	
-	//忘记密码
+	//锟斤拷锟斤拷锟斤拷锟斤拷
 	public Integer forgetPwd(Sysuser user);
+	
+	public List<Sysuser> getClazzInfo();
 }
+

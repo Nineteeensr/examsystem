@@ -5,6 +5,25 @@ public class Paper {
 	private Integer sid;
 	private Integer scount;
 	private Integer pid;
+	//参加考试的人数
+	private Integer joinCount;
+
+	public Integer getJoinCount() {
+		return joinCount;
+	}
+
+	public void setJoinCount(Integer joinCount) {
+		this.joinCount = joinCount;
+	}
+
+	public Paper(String pname, Integer sid, Integer scount, Integer pid, Integer joinCount) {
+		super();
+		this.pname = pname;
+		this.sid = sid;
+		this.scount = scount;
+		this.pid = pid;
+		this.joinCount = joinCount;
+	}
 
 	public Integer getPid() {
 		return pid;

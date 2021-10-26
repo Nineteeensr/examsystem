@@ -22,28 +22,29 @@ import cn.kgc.kjde1035.group1.entity.Subject;
  */
 public interface PaperDao {
 	// cyg
-	// Ñ§Éúµã»÷ÊÔ¾í»ñÈ¡ÊÔÌâ
+	// Ñ§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¾ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½
 	public List<Subject> subjectList(Paper paper);
 
-	// Ñ§ÉúµÇÂ¼ºó½øÈëindexÒ³ÃæÏÔÊ¾È«²¿ÊÔÌâ
-	public List<Paper> list(Paper paper);
+	// Ñ§ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½indexÒ³ï¿½ï¿½ï¿½ï¿½Ê¾È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	public List<Paper> list(Integer userId);
 
 	// zjz
-	// Éú³ÉÊÔ¾í
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ô¾ï¿½
 	public Integer addPaper(Paper paper);
 
-	// ²é¿´ÊÔÌâÄÚÈİ
+	// ï¿½é¿´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public List<Subject> getSubjectListByPname(String pname);
 
-//		// ÏÔÊ¾È«²¿ÊÔ¾í
+//		// ï¿½ï¿½Ê¾È«ï¿½ï¿½ï¿½Ô¾ï¿½
 //		public List<Paper> getPaperListByPname(String pname);
 
-	// »ñÈ¡ÊÔÌâÊıÁ¿
+	// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public Integer getTotalCount(String pname);
 
-	// ²éÑ¯È«²¿ÊÔ¾í
+	// ï¿½ï¿½Ñ¯È«ï¿½ï¿½ï¿½Ô¾ï¿½
 	public List<Paper> getPaperListByLimit(String pname, int currentPageNo, int pageSize);
 
-	// É¾³ıÊÔ¾í
+	// É¾ï¿½ï¿½ï¿½Ô¾ï¿½
 	public Integer delect(String pname);
+	
 }
